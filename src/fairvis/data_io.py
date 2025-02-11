@@ -33,7 +33,6 @@ def load_indicators(df_models: Dict[str, pd.DataFrame]) -> pd.DataFrame:
 
     assessments = [[0.0, 0.0, 0.0, 0.0] for _ in range(len(df_indicators))]
     for model_id, df_model in df_models.items():
-
         # Count classes
         for k, value in enumerate(df_model["Assessment"].values):
             # console.print(f"{value}, {type(value)}")

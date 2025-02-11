@@ -1,14 +1,10 @@
 """Create plots for the indicators."""
 
-from pathlib import Path
 from typing import List
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
-from console import console
-from plotly.subplots import make_subplots
-from settings import DATA_PATH
 
 subset_keys = ["Model", "Model metadata", "Archive", "Archive metadata"]
 color_discrete_sequence = [

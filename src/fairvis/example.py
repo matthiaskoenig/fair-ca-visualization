@@ -1,12 +1,10 @@
 """Example to test visualization."""
 
-import pandas as pd
 from data_io import load_assessment
 from settings import DATA_PATH
-from visualization import visualize_barplot, visualize_polar_barplots
+from visualization import visualize_barplot
 
 if __name__ == "__main__":
-
     model_id = "BioModels_curated"
     df = load_assessment(DATA_PATH / "assessments" / f"{model_id}.xlsx")
 

@@ -95,25 +95,25 @@ with tab_about:
         To assess your model select the **Assess your Model Tab**.
         """
     )
-    st.html(
+    st.markdown(
         """
-        <h2>Contributors</h2>
-        <strong>Optimising research through FAIRification of computational models in biology</strong></br>
+        ## Contributors
+        **Optimising research through FAIRification of computational models in biology**
 
-        Irina Balaur<sup>1</sup>, David Nickerson<sup>2</sup>, Danielle Welter<sup>1</sup>, Judith A.H. Wodke<sup>3</sup>, Francois Ancien<sup>1</sup>, Tom Gebhardt<sup>3</sup>, Valentin Grouès<sup>1</sup>, Henning Hermjakob<sup>4</sup>, Matthias König<sup>5</sup>, Nicole Radde<sup>6</sup>, Adrien Rougny<sup>1</sup>, Reinhard Schneider<sup>1</sup>, Rahuman Sheriff<sup>4</sup>, Kirubel Biruk Shiferaw<sup>3</sup>, Melanie Stefan<sup>7</sup>, Venkata Satagopam<sup>1</sup>, Dagmar Waltemath<sup>3</sup></br>
+        Irina Balaur[1], David Nickerson[2], Danielle Welter[1], Judith A.H. Wodke[3], Francois Ancien[1], Tom Gebhardt[3], Valentin Grouès[1], Henning Hermjakob[4], Matthias König[5], Nicole Radde[6], Adrien Rougny[1], Reinhard Schneider[1], Rahuman Sheriff[4], Kirubel Biruk Shiferaw[3], Melanie Stefan[7], Venkata Satagopam[1], Dagmar Waltemath[3]
 
-        <sup>1</sup> Luxembourg Centre for Systems Biomedicine (LCSB), University of Luxembourg, Luxembourg</br>
-        <sup>2</sup> Auckland Bioengineering Institute, University of Auckland, New Zealand</br>
-        <sup>3</sup> Medical Informatics Laboratory, University Medicine Greifswald, Germany</br>
-        <sup>4</sup> European Molecular Biology Laboratory, European Bioinformatics Institute (EMBL-EBI), UK</br>
-        <sup>5</sup> Institute for Biology, Institute for Theoretical Biology, Humboldt University of Berlin, Germany</br>
-        <sup>6</sup> Institute for Stochastics and Applications, University Stuttgart, Germany</br>
-        <sup>7</sup> Medical School Berlin, Berlin, Germany</br>
+        [1] Luxembourg Centre for Systems Biomedicine (LCSB), University of Luxembourg, Luxembourg
+        [2] Auckland Bioengineering Institute, University of Auckland, New Zealand
+        [3] Medical Informatics Laboratory, University Medicine Greifswald, Germany
+        [4] European Molecular Biology Laboratory, European Bioinformatics Institute (EMBL-EBI), UK
+        [5] Institute for Biology, Institute for Theoretical Biology, Humboldt University of Berlin, Germany
+        [6] Institute for Stochastics and Applications, University Stuttgart, Germany
+        [7] Medical School Berlin, Berlin, Germany
 
-        <h2>How to cite this tool</h2>
-        <a href="https://doi.org/10.5281/zenodo.13755820" target="_blank"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg" alt="DOI"></a>
+        ## How to cite this tool
+        [!https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg](https://doi.org/10.5281/zenodo.13755820)
 
-        <h2>Funding</h2>
+        ## Funding
         Matthias König was supported by the BMBF within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
         """
     )
@@ -221,6 +221,6 @@ with tab_assessment:
 st.divider()
 st.markdown(
     """
-    © 2024 Matthias König, https://github.com/matthiaskoenig/fair-ca-visualization
+    © 2024-2025 Matthias König, https://github.com/matthiaskoenig/fair-ca-visualization
     """
 )
