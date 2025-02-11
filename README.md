@@ -1,3 +1,5 @@
+![fair-ca-visualization logo](https://github.com/matthiaskoenig/fair-ca-visualization/raw/main/docs/fair-ca-logo.png)
+
 # fair-ca-visualization
 Computational models are essential tools for studying complex systems which,
 particularly in clinical settings, need to be quality-approved and transparent.
@@ -26,9 +28,9 @@ git clone https://github.com/matthiaskoenig/fair-ca-visualization.git
 cd fair-ca-visualization
 ```
 
-Setup virtual environment and install the dependencies
+Setup environment
 ```bash
-mkvirtualenv fairvis --python=python3.12
+uv sync
 pip install -r requirements.txt
 ```
 
@@ -37,22 +39,23 @@ Run the application
 streamlit run src/fairvis/app.py
 ```
 
+# Development
+## setup uv
+```bash
+uv init
+```
+
+## Setup pre-commit
+```bash
+uv pip install pre-commit
+pre-commit install
+pre-commit run
+```
+
 # License
 
-* Source Code: [LGPLv3](http://opensource.org/licenses/LGPL-3.0)
-* Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
-
-The fair-ca-visualization source is released under both the GPL and LGPL licenses version 2 or
-later. You may choose which license you choose to use the software under.
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License or the GNU Lesser General Public
-License as published by the Free Software Foundation, either version 2 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
+* Source Code: [MIT](https://opensource.org/license/MIT)
+* Documentation: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 # Funding
 Matthias König (MK) was supported by the Federal Ministry of Education and Research 
@@ -64,4 +67,4 @@ QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resectio
 A Systems Medicine Approach) by grant number 436883643 and by grant number 
 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
-© 2024 Matthias König
+© 2024 - 2025 Matthias König

@@ -1,0 +1,42 @@
+[project]
+name = "fair-ca-visualization"
+version = "0.2.0"
+description = "FAIR COMBINE Archive Indicators"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+	{name="Matthias König", email="konigmatt@googlemail.com"}
+]
+maintainers = [
+	{name="Matthias König", email="konigmatt@googlemail.com"}
+]
+classifiers = [
+	"Development Status :: 4 - Beta",
+	"Intended Audience :: Science/Research",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+	"Programming Language :: Python :: Implementation :: CPython",
+	"Topic :: Scientific/Engineering",
+	"Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+keywords = [
+	"modeling",
+	"standardization",
+	"COMBINE",
+	"FAIR",
+]
+dependencies = [
+	"pandas>=2.2.2",
+    "rich>=13.8.0",
+    "openpyxl>=3.1.5",
+    "plotly>=5.24.0",
+    "streamlit>=1.38.0",
+]
+
+[project_urls]
+Homepage = "https://github.com/matthiaskoenig/fair-ca-visualization"
+Repository = "https://github.com/matthiaskoenig/fair-ca-visualization"
+Documentation = "https://github.com/matthiaskoenig/fair-ca-visualization"
+Issues = "https://github.com/matthiaskoenig/fair-ca-visualization/issues"
