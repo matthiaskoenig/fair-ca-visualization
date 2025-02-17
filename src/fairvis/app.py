@@ -111,7 +111,7 @@ with tab_about:
         [7] Medical School Berlin, Berlin, Germany
 
         ## How to cite this tool
-        [!https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg](https://doi.org/10.5281/zenodo.13755820)
+        [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
 
         ## Funding
         Matthias König was supported by the BMBF within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
@@ -221,6 +221,6 @@ with tab_assessment:
 st.divider()
 st.markdown(
     """
-    © 2024-2025 Matthias König, https://github.com/matthiaskoenig/fair-ca-visualization
+    © 2024-2025 [Matthias König](https://livermetabolism.com), https://github.com/matthiaskoenig/fair-ca-visualization,  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
     """
 )
