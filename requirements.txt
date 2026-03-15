@@ -60,12 +60,14 @@ pandas==2.2.3
     #   streamlit
 pillow==11.1.0
     # via streamlit
-plotly==6.0.0
+plotly==6.6.0
     # via fair-ca-visualization (pyproject.toml)
 protobuf==5.29.3
     # via streamlit
-pyarrow==19.0.0
-    # via streamlit
+pyarrow==23.0.1
+    # via
+    #   fair-ca-visualization (pyproject.toml)
+    #   streamlit
 pydeck==0.9.1
     # via streamlit
 pygments==2.19.1
@@ -80,10 +82,8 @@ referencing==0.36.2
     #   jsonschema-specifications
 requests==2.32.3
     # via streamlit
-rich==13.9.4
-    # via
-    #   fair-ca-visualization (pyproject.toml)
-    #   streamlit
+rich==14.3.3
+    # via fair-ca-visualization (pyproject.toml)
 rpds-py==0.22.3
     # via
     #   jsonschema
@@ -92,7 +92,7 @@ six==1.17.0
     # via python-dateutil
 smmap==5.0.2
     # via gitdb
-streamlit==1.42.0
+streamlit==1.55.0
     # via fair-ca-visualization (pyproject.toml)
 tenacity==9.0.0
     # via streamlit
@@ -101,10 +101,7 @@ toml==0.10.2
 tornado==6.4.2
     # via streamlit
 typing-extensions==4.12.2
-    # via
-    #   altair
-    #   referencing
-    #   streamlit
+    # via streamlit
 tzdata==2025.1
     # via pandas
 urllib3==2.3.0

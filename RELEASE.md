@@ -1,5 +1,9 @@
 # Release information
-- update requirements.txt via `create_requirements.txt`
+- update requirements.txt via
+```bash
+./update_requirements_txt.sh
+```
+
 - test all functionality locally
 - update version in `settings.py`
 - update release notes
