@@ -89,11 +89,11 @@ with tab_about:
         ## How to cite the visualization tool
         [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
 
-        ## Example visualization
-        The example visualization demonstrates the **Model** and **Model Metadata** FAIR indicators using the *BioModels_C19_curated* example.
-
         ## Funding
         Matthias König was supported by the **German Federal Ministry of Education and Research (BMBF)** within the ATLAS project (grant number 031L0304B) and by the **German Research Foundation (DFG)** within the Research Unit Program **FOR 5151 QuaLiPerF** (grant number 436883643) and the **Priority Programme SPP 2311 (Subproject SimLivA)** (grant number 465194077).
+
+        ## Example visualization
+        The example visualization demonstrates the **Model** and **Model Metadata** FAIR indicators using the *BioModels_C19_curated* example.
         """
     )
     figs_example = visualize_polar_barplots(df_data=models["BioModels_C19_curated"])
