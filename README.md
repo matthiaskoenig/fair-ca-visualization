@@ -65,4 +65,4 @@ QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resectio
 A Systems Medicine Approach) by grant number 436883643 and by grant number
 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
-© 2024 - 2025 Matthias König
+© 2024 - 2026 Matthias König

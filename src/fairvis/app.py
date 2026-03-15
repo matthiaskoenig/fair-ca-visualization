@@ -53,32 +53,47 @@ df_indicators, models = load_data()
 # --- Main ----------------------------------------------------------------------------
 st.markdown(
     """
-    # FAIR COMBINE Archive Indicators Visualization
+    # Visualize FAIR COMBINE Archive Indicators
     """
 )
-tab_about, tab_models, tab_indicators, tab_assessment = st.tabs(
-    ["About", "Models", "Indicators", "Assess your Model"]
+tab_about, tab_assessment, tab_models, tab_indicators = st.tabs(
+    [
+        "About",
+        "Assess Model",
+        "Example Assessments",
+        "Indicators",
+    ]
 )
 
 with tab_about:
     st.markdown(
         """
-        Computational models are essential tools for studying complex systems which,
-        particularly in clinical settings, need to be quality-approved and transparent.
-        A community-driven approach to enhance the transparency and communication of
-        model features is adherence to the principles of Findability, Accessibility,
-        Interoperability and Reusability (FAIR). We propose here an adaptation of the
-        FAIR indicators published by the Research Data Alliance to assess the
-        FAIRness of models encoded in domain-specific standards, such as those
-        established by [COMBINE](https://co.mbine.org).
+        ## Motivation
+        Computational models are essential tools for studying complex biological systems. In biomedical and clinical contexts in particular, models must be transparent, well-documented, and reproducible** to ensure reliability and reuse.
 
-        The FAIR COMBINE Archive Indicators project is available from [https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io](https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io).
+        A community-driven approach to improving transparency and communication of model characteristics is the adoption of the **FAIR principles**: *Findability, Accessibility, Interoperability, and Reusability*. Building on the FAIR indicators developed by the **Research Data Alliance (RDA)**, we propose an adaptation specifically designed for computational models encoded in domain standards developed within the **[COMBINE](https://co.mbine.org)** community.
+
+        The **FAIR COMBINE Archive Indicators** enable systematic assessment of the FAIRness of models packaged as COMBINE archives and support improved documentation, sharing, and reuse of computational models in the life sciences. More information is available from:
+
+        >*Balaur I., Nickerson D.P., Welter D., Wodke J.A.H., Ancien F., Gebhardt T., Grouès V., Hermjakob H., König M., Radde N., Rougny A., Schneider R., Malik-Sheriff R.S., Shiferaw K.B., Stefan M., Satagopam V., Waltemath D. (2025).*
+        >**FAIRification of computational models in biology.**
+        >bioRxiv 2025.03.21.644517 (preprint). doi: [10.1101/2025.03.21.644517](https://doi.org/10.1101/2025.03.21.644517)
+
+        ## Usage
+        This webpage provides an interactive visualization of the **FAIR COMBINE Archive Indicators**,
+
+        - Use the **Assess Model** tab to assess your own model (a template for the indicators is provided).
+        - Use the **Example Assessments** tab to explore FAIR indicator assessments for example models.
+        - Use the **Indicators** tab to browse the individual FAIR indicators.
+
+        ## How to cite the visualization tool
+        [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
+
+        ## Funding
+        Matthias König was supported by the **German Federal Ministry of Education and Research (BMBF)** within the ATLAS project (grant number 031L0304B) and by the **German Research Foundation (DFG)** within the Research Unit Program **FOR 5151 QuaLiPerF** (grant number 436883643) and the **Priority Programme SPP 2311 (Subproject SimLivA)** (grant number 465194077).
 
         ## Example visualization
-        The following demonstrates the Model and Model metadata indicators for the
-        BioModels_C19_curated example. To browse the FAIR indicators for the example
-        models select the **Models Tab** above.
-        To browse the indicators select the **Indicators Tab** above.
+        The example visualization demonstrates the **Model** and **Model Metadata** FAIR indicators using the *BioModels_C19_curated* example.
         """
     )
     figs_example = visualize_polar_barplots(df_data=models["BioModels_C19_curated"])
@@ -88,35 +103,6 @@ with tab_about:
     with col2a:
         st.plotly_chart(figs_example[1])
 
-    st.markdown(
-        """
-        ## Assess your model
-
-        To assess your model select the **Assess your Model Tab**.
-        """
-    )
-    st.markdown(
-        """
-        ## Contributors
-        **Optimising research through FAIRification of computational models in biology**
-
-        Irina Balaur[1], David Nickerson[2], Danielle Welter[1], Judith A.H. Wodke[3], Francois Ancien[1], Tom Gebhardt[3], Valentin Grouès[1], Henning Hermjakob[4], Matthias König[5], Nicole Radde[6], Adrien Rougny[1], Reinhard Schneider[1], Rahuman Sheriff[4], Kirubel Biruk Shiferaw[3], Melanie Stefan[7], Venkata Satagopam[1], Dagmar Waltemath[3]
-
-        [1] Luxembourg Centre for Systems Biomedicine (LCSB), University of Luxembourg, Luxembourg
-        [2] Auckland Bioengineering Institute, University of Auckland, New Zealand
-        [3] Medical Informatics Laboratory, University Medicine Greifswald, Germany
-        [4] European Molecular Biology Laboratory, European Bioinformatics Institute (EMBL-EBI), UK
-        [5] Institute for Biology, Institute for Theoretical Biology, Humboldt University of Berlin, Germany
-        [6] Institute for Stochastics and Applications, University Stuttgart, Germany
-        [7] Medical School Berlin, Berlin, Germany
-
-        ## How to cite this tool
-        [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
-
-        ## Funding
-        Matthias König was supported by the BMBF within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
-        """
-    )
 
 with tab_indicators:
     st.dataframe(
@@ -221,6 +207,6 @@ with tab_assessment:
 st.divider()
 st.markdown(
     """
-    © 2024-2025 [Matthias König](https://livermetabolism.com), https://github.com/matthiaskoenig/fair-ca-visualization,  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
+    © 2024-2026 [Matthias König](https://livermetabolism.com) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
     """
 )
