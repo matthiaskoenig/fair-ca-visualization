@@ -99,15 +99,15 @@ with tab_about:
     figs_example = visualize_polar_barplots(df_data=models["BioModels_C19_curated"])
     col1a, col2a = st.columns(2)
     with col1a:
-        st.plotly_chart(figs_example[0])
+        st.plotly_chart(figs_example[0], key="pchart_example1")
     with col2a:
-        st.plotly_chart(figs_example[1])
+        st.plotly_chart(figs_example[1], key="pchart_example2")
 
 
 with tab_indicators:
     st.dataframe(
         data=df_indicators,
-        use_container_width=True,
+        width="stretch",
         column_config={
             "Assessment": st.column_config.BarChartColumn(
                 "FAIR Assessment",
@@ -129,23 +129,23 @@ with tab_models:
 
     with col_fair:
         fig_bar = visualize_barplot(df_data=df_model)
-        st.plotly_chart(fig_bar, use_container_width=False)
+        st.plotly_chart(fig_bar, width="content", key="pchart_models_bar1")
 
     # plotly plot
     figs = visualize_polar_barplots(df_data=df_model)
     col1, col2 = st.columns(2)
     with col1:
-        st.plotly_chart(figs[0])
+        st.plotly_chart(figs[0], key="pchart_models_col1")
     with col2:
-        st.plotly_chart(figs[1])
+        st.plotly_chart(figs[1], key="pchart_models_col2")
     col3, col4 = st.columns(2)
     with col3:
-        st.plotly_chart(figs[2])
+        st.plotly_chart(figs[2], key="pchart_models_col3")
     with col4:
-        st.plotly_chart(figs[3])
+        st.plotly_chart(figs[3], key="pchart_models_col4")
 
     # show dataframe
-    st.dataframe(df_model, use_container_width=True)
+    st.dataframe(df_model, width="stretch")
 
 with tab_assessment:
     col_upload, col_template, col_fair_upload = st.columns(3, gap="medium")
@@ -185,24 +185,24 @@ with tab_assessment:
     with col_fair_upload:
         if df_model_upload is not None:
             fig_bar = visualize_barplot(df_data=df_model_upload)
-            st.plotly_chart(fig_bar, use_container_width=False)
+            st.plotly_chart(fig_bar, width="content")
 
     if uploaded_xlsx is not None:
         # plotly plot
         figs = visualize_polar_barplots(df_data=df_model_upload)
         col1, col2 = st.columns(2)
         with col1:
-            st.plotly_chart(figs[0])
+            st.plotly_chart(figs[0], key="pchart_assessment_col1")
         with col2:
-            st.plotly_chart(figs[1])
+            st.plotly_chart(figs[1], key="pchart_assessment_col2")
         col3, col4 = st.columns(2)
         with col3:
-            st.plotly_chart(figs[2])
+            st.plotly_chart(figs[2], key="pchart_assessment_col3")
         with col4:
-            st.plotly_chart(figs[3])
+            st.plotly_chart(figs[3], key="pchart_assessment_col4")
 
         # show dataframe
-        st.dataframe(df_model_upload, use_container_width=True)
+        st.dataframe(df_model_upload, width="stretch")
 
 st.divider()
 st.markdown(

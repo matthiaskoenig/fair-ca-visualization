@@ -20,7 +20,7 @@ The visualization tool is available from: https://faircombine.streamlit.app/
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
 
 # Local installation
-The app has been implemented as streamlit application and can be run locally.
+The app has been implemented as a streamlit application and can be run locally.
 
 Clone the repository
 ```bash
