@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "fair-ca-visualization"
 # a static version: uv.lock records it, the uv of Streamlit Community Cloud
 # cannot parse a uv.lock without it; kept current by bump-my-version
-version = "0.4.1"
+version = "0.5.0"
 description = "Interactive visualization of the FAIR COMBINE Archive Indicators (FAIR-CA) for computational models."
 readme = "README.md"
 requires-python = ">=3.14"

@@ -10,7 +10,7 @@ ROOT = Path(__file__).parents[1]
 
 def test_version() -> None:
     # kept current by bump-my-version, see .bumpversion.toml
-    assert fairvis.__version__ == "0.4.1"
+    assert fairvis.__version__ == "0.5.0"
 
 
 def test_version_of_pyproject() -> None:
