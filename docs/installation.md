@@ -31,6 +31,12 @@ fairvis
 
 `python -m fairvis` starts the app as well.
 
+The export of figures needs Chrome or Chromium, see [Exporting a figure](usage.md#exporting-a-figure). Without one, download a Chrome for the export into the data directory of your user, where the app finds it:
+
+```bash
+uv tool run --from fair-ca-visualization plotly_get_chrome   # or plotly_get_chrome in the activated virtual environment
+```
+
 ## From a checkout
 
 To run the latest development version:

@@ -55,7 +55,7 @@ cd fair-ca-visualization
 uv sync
 ```
 
-`uv sync` creates the virtual environment in `.venv` from the committed `uv.lock`, installs `fairvis` into it in editable mode and adds the `dev` dependency group (pytest, ruff, ty, pre-commit, bump-my-version, zensical). Streamlit Community Cloud installs the app from the same `uv.lock`, so local development, continuous integration and production use the same versions. After a change of the dependencies in `pyproject.toml` run `uv lock` and commit `uv.lock`.
+`uv sync` creates the virtual environment in `.venv` from the committed `uv.lock`, installs `fairvis` into it in editable mode and adds the `dev` dependency group (pytest, ruff, ty, pre-commit, bump-my-version, zensical). Streamlit Community Cloud installs the app from the same `uv.lock`, so local development, continuous integration and production use the same versions. After a change of the dependencies in `pyproject.toml` run `uv lock` and commit `uv.lock`. The system packages of the app on Streamlit Community Cloud are listed in `packages.txt`: Chromium, which kaleido needs for the export of figures. The tests of the export need Chrome or Chromium as well; the runners of GitHub Actions have Chrome.
 
 Install the git hook, which runs ruff and ty on every commit:
 

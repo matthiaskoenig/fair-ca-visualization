@@ -3,8 +3,9 @@
 import io
 
 import pandas as pd
+import pytest
 from streamlit.testing.v1 import AppTest
-from streamlit.testing.v1.element_tree import FileUploader
+from streamlit.testing.v1.element_tree import ButtonGroup, DownloadButton, FileUploader
 
 from fairvis.data_io import load_model_assessments
 from fairvis.settings import APP_PATH, ASSESSMENTS_PATH
@@ -51,6 +52,17 @@ def test_upload_is_kept_on_every_tab() -> None:
         assert file_uploader(app(tab=tab))
 
 
+def export_button(at: AppTest) -> DownloadButton | None:
+    """The download button of the figure export, if shown."""
+    buttons = [
+        button
+        for button in at.get("download_button")
+        if isinstance(button, DownloadButton) and button.proto.label == "Export figure"
+    ]
+    assert len(buttons) <= 1
+    return buttons[0] if buttons else None
+
+
 def test_no_stray_text() -> None:
     # a bare string literal would be rendered by streamlit's magic
     at = app()
@@ -86,6 +98,33 @@ def test_model_from_query_param() -> None:
     assert at.selectbox[0].value == "PMR_curated"
 
 
+def test_export_of_an_example() -> None:
+    at = app(tab="Example Assessments", model="PMR_curated")
+    (formats,) = at.get("segmented_control")
+    assert isinstance(formats, ButtonGroup)
+    assert list(formats.options) == ["PNG", "JPEG", "SVG", "PDF"]
+    assert formats.value == "png"
+    button = export_button(at)
+    # rendered only when clicked
+    assert button is not None
+    assert button.proto.deferred_file_id
+    at = formats.set_value("pdf").run()
+    assert not at.exception
+    assert export_button(at) is not None
+
+
+def test_export_needs_a_browser(monkeypatch: pytest.MonkeyPatch) -> None:
+    # without Chrome or Chromium the export is disabled and says why
+    monkeypatch.setattr(
+        "choreographer.browsers.chromium.Chromium.find_browser",
+        lambda **_: None,
+    )
+    button = export_button(app(tab="Example Assessments"))
+    assert button is not None
+    assert button.proto.disabled
+    assert "Chrome or Chromium" in button.proto.help
+
+
 def test_upload_of_an_assessment() -> None:
     at = app(tab="Assess Model")
     content = (ASSESSMENTS_PATH / "PMR_curated.xlsx").read_bytes()
@@ -94,6 +133,7 @@ def test_upload_of_an_assessment() -> None:
     assert not at.exception
     assert not at.error
     assert len(at.dataframe) == 1
+    assert export_button(at) is not None
 
 
 def test_upload_of_an_invalid_file() -> None:
@@ -103,6 +143,7 @@ def test_upload_of_an_invalid_file() -> None:
     assert not at.exception
     assert "no readable xlsx file" in at.error[0].value
     assert not at.dataframe
+    assert export_button(at) is None
 
 
 def test_indicators_tab_counts_the_examples() -> None:
