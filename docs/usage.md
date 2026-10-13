@@ -14,7 +14,7 @@ Assess your own model:
 2. Fill in the column `Assessment` for every indicator, see [Assessing a model](assessment.md).
 3. Upload the filled template with **Upload FAIR model assessment**, at most 1 MB.
 
-The app shows the FAIR percentage per category as a bar plot, one polar bar plot per type of indicator (Model, Model metadata, Archive, Archive metadata), and the table of the assessment. In the polar bar plots an indicator which does not apply to the model (NA) is a full gray bar, an indicator assessed with 0 has no bar; see [Scoring](assessment.md#scoring) for the percentages. A file which is not a filled template, misses or adds indicators, or has an assessment value other than empty, 0, 0.5 or 1 is reported as an error naming the columns or the indicators.
+The app shows the FAIR percentage per category as a bar plot, one polar bar plot per type of indicator (Model, Model metadata, Archive, Archive metadata), and the table of the assessment. In the polar bar plots an indicator which does not apply to the model (NA) is a full gray bar, an indicator assessed with 0 has no bar; see [Scoring](assessment.md#scoring) for the percentages. A file which is not a filled template, misses or adds indicators, or has an assessment value other than empty, 0, 0.5 or 1 is reported as an error naming the columns or the indicators. Only the column `Assessment` is taken from the file, the description of the indicators always comes from the template. The uploaded file stays selected when you switch tabs.
 
 The uploaded file is only processed in the running app: it is never written to disk, never shared with other users of the app and is discarded when you close the page.
 

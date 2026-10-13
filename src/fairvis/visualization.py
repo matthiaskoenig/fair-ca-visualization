@@ -39,7 +39,7 @@ def visualize_barplot(df_data: pd.DataFrame) -> go.Figure:
     """Bar plot of the fraction of the applicable indicators fulfilled per category.
 
     NA marks an indicator which does not apply to the model; it is not counted. A
-    category without applicable indicators has no bar.
+    category without applicable indicators is labeled NA.
 
     Args:
         df_data: assessment of a model, see `fairvis.data_io.load_assessment`.
@@ -55,10 +55,10 @@ def visualize_barplot(df_data: pd.DataFrame) -> go.Figure:
             "total": grouped.size(),
         }
     )
-    df["percentage"] = 100 * df["value"] / df["applicable"].where(df["applicable"] > 0)
-    df["label"] = [
-        "NA" if np.isnan(p) else f"{p:.0f}%" for p in df["percentage"].to_numpy()
-    ]
+    percentage = 100 * df["value"] / df["applicable"].where(df["applicable"] > 0)
+    df["label"] = ["NA" if np.isnan(p) else f"{p:.0f}%" for p in percentage.to_numpy()]
+    # a category without applicable indicators is labeled NA at 0
+    df["percentage"] = percentage.fillna(0.0)
     df = df.rename_axis("category").reset_index()
 
     fig = px.bar(

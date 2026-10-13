@@ -55,9 +55,12 @@ def test_barplot_excludes_na() -> None:
     )
     fig = visualize_barplot(df)
     y = {trace.x[0]: trace.y[0] for trace in fig.data}
+    text = {trace.x[0]: trace.text[0] for trace in fig.data}
     assert y["Findable"] == 50.0
-    # no applicable indicator, no bar
-    assert math.isnan(y["Accessible"])
+    assert text["Findable"] == "50%"
+    # no applicable indicator: labeled NA at 0
+    assert y["Accessible"] == 0.0
+    assert text["Accessible"] == "NA"
 
 
 def test_polar_barplots_show_na() -> None:

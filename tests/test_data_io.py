@@ -5,11 +5,14 @@ import math
 import re
 import zipfile
 from collections.abc import Callable
+from pathlib import Path
 
+import openpyxl
 import pandas as pd
 import pytest
 
 from fairvis.data_io import (
+    MAX_COLUMNS,
     MAX_ROWS,
     MAX_UNPACKED_BYTES,
     assessment_class,
@@ -19,6 +22,7 @@ from fairvis.data_io import (
     validate_assessment,
 )
 from fairvis.settings import ASSESSMENTS_PATH, TEMPLATE_PATH
+from fairvis.visualization import SUBSET_KEYS
 
 ToXlsx = Callable[[pd.DataFrame], io.BytesIO]
 
@@ -125,12 +129,86 @@ def test_load_assessment_zip_bomb() -> None:
         load_assessment(upload)
 
 
-def test_load_assessment_reads_an_upload_after_the_size_check(
+def test_load_assessment_unsupported_zip() -> None:
+    # zipfile raises NotImplementedError for a zip version it cannot extract
+    upload = io.BytesIO()
+    with zipfile.ZipFile(upload, "w") as archive:
+        archive.writestr("xl/workbook.xml", b"<workbook/>")
+    data = bytearray(upload.getvalue())
+    central = data.index(b"PK\x01\x02")
+    data[central + 6 : central + 8] = (99).to_bytes(2, "little")
+    with pytest.raises(ValueError, match=r"^The file is no readable xlsx file\.$"):
+        load_assessment(io.BytesIO(bytes(data)))
+
+
+def test_load_assessment_reads_at_most_max_columns(
+    template_df: pd.DataFrame, tmp_path: Path
+) -> None:
+    # a cell in the last column of a sheet would make every row 16384 cells wide
+    path = tmp_path / "wide.xlsx"
+    template_df.to_excel(path, index=False)
+    workbook = openpyxl.load_workbook(path)
+    sheet = workbook.worksheets[0]
+    for row in range(1, len(template_df) + 2):
+        sheet.cell(row=row, column=16384, value="x")
+    workbook.save(path)
+    df = load_assessment(path)
+    assert len(df.columns) < MAX_COLUMNS
+    assert len(df) == len(template_df)
+
+
+def test_load_assessment_rows_without_id(
     template_df: pd.DataFrame, to_xlsx: ToXlsx
 ) -> None:
-    upload = to_xlsx(template_df)
-    upload.seek(5)
-    assert len(load_assessment(upload)) == len(template_df)
+    df = template_df.copy()
+    df.loc[3, "ID"] = None
+    with pytest.raises(ValueError, match="rows without ID"):
+        load_assessment(to_xlsx(df))
+
+
+def test_load_assessment_skips_empty_rows(
+    template_df: pd.DataFrame, to_xlsx: ToXlsx
+) -> None:
+    empty = pd.DataFrame(
+        [[None] * len(template_df.columns)], columns=template_df.columns
+    )
+    df = pd.concat(
+        [template_df.iloc[:3], empty, template_df.iloc[3:]], ignore_index=True
+    )
+    assert len(load_assessment(to_xlsx(df))) == len(template_df)
+
+
+def test_load_assessment_takes_the_metadata_of_the_template(
+    template_df: pd.DataFrame, to_xlsx: ToXlsx
+) -> None:
+    # only the assessment comes from the upload, the indicators from the template
+    df = template_df.copy()
+    df.loc[3, ["Short", "Type", "Category"]] = ["S", "Other", None]
+    loaded = load_assessment(to_xlsx(df))
+    indicator_id = template_df.loc[3, "ID"]
+    for column in ["Short", "Type", "Category"]:
+        assert loaded.loc[indicator_id, column] == template_df.loc[3, column]
+
+
+@pytest.mark.parametrize("path", sorted(ASSESSMENTS_PATH.glob("*.xlsx")), ids=str)
+def test_load_assessment_agrees_with_pandas(path: Path) -> None:
+    expected = pd.read_excel(path, sheet_name=0).set_index("ID")
+    df = load_assessment(path)
+    pd.testing.assert_series_equal(
+        df["Assessment"], expected["Assessment"].astype(float), check_names=False
+    )
+    assert list(df.index) == list(expected.index)
+
+
+def test_template_indicators_have_type_and_category(template_df: pd.DataFrame) -> None:
+    # an indicator without type is in no polar bar plot
+    assert set(template_df["Type"]) == set(SUBSET_KEYS)
+    assert set(template_df["Category"]) == {
+        "Findable",
+        "Accessible",
+        "Interoperable",
+        "Reusable",
+    }
 
 
 def test_xml_of_uploads_is_parsed_defused() -> None:

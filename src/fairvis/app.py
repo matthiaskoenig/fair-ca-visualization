@@ -8,6 +8,7 @@ the query parameter `tab`, so a tab can be linked to directly, e.g.
 """
 
 import io
+import re
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -36,8 +37,8 @@ SOFTWARE_CITATION = (
     f"doi:[{SOFTWARE_DOI}](https://doi.org/{SOFTWARE_DOI})"
 )
 TABS = ("About", "Assess Model", "Example Assessments", "Indicators")
+# example assessment of the About tab; no docstring, streamlit would render it
 ABOUT_MODEL = "BioModels_C19_curated"
-"""Example assessment shown on the About tab."""
 
 st.set_page_config(
     page_title="FAIR-CA visualization",
@@ -63,6 +64,18 @@ st.html(
     </style>
     """
 )
+
+
+def escape_markdown(text: str) -> str:
+    """Escape the markdown of a text, e.g., of an uploaded file.
+
+    Args:
+        text: text to show with a markdown element such as `st.error`.
+
+    Returns:
+        the text with every markdown character escaped by a backslash.
+    """
+    return re.sub(r"([\\`*_{}\[\]()<>#+\-.!|~$])", r"\\\1", text)
 
 
 @st.cache_data
@@ -183,40 +196,46 @@ if tab_about.open:
             with column:
                 st.plotly_chart(fig, key=f"about_{fig.layout.title.text}")
 
-if tab_assessment.open:
-    with tab_assessment:
-        st.markdown(
-            """
-            1. Download the FAIR assessment template.
-            2. Assess your model: enter for every indicator `1` (fulfilled), `0.5` (partially fulfilled), `0` (not fulfilled) or leave the cell empty if the indicator does not apply to your model (NA).
-            3. Upload the filled template.
-            """
+# the controls of the upload are created on every run, so that the uploaded file
+# is kept when the user switches tabs; only the result is computed lazily
+with tab_assessment:
+    st.markdown(
+        """
+        1. Download the FAIR assessment template.
+        2. Assess your model: enter for every indicator `1` (fulfilled), `0.5` (partially fulfilled), `0` (not fulfilled) or leave the cell empty if the indicator does not apply to your model (NA).
+        3. Upload the filled template.
+        """
+    )
+    col_upload, col_bar = st.columns([1, 2], gap="large")
+    with col_upload:
+        st.download_button(
+            "Download FAIR template",
+            template_bytes(),
+            file_name="FAIR_assessment_template.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            icon=":material/download:",
+            key="template",
         )
-        col_upload, col_bar = st.columns([1, 2], gap="large")
-        with col_upload:
-            st.download_button(
-                "Download FAIR template",
-                template_bytes(),
-                file_name="FAIR_assessment_template.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                icon=":material/download:",
+        uploaded_xlsx = st.file_uploader(
+            "Upload FAIR model assessment",
+            type="xlsx",
+            accept_multiple_files=False,
+            key="upload",
+        )
+    if tab_assessment.open and uploaded_xlsx is not None:
+        try:
+            df_upload = uploaded_assessment(uploaded_xlsx.getvalue())
+        except ValueError as err:
+            st.error(
+                "The uploaded file is no valid FAIR assessment. "
+                + escape_markdown(str(err))
             )
-            uploaded_xlsx = st.file_uploader(
-                "Upload FAIR model assessment",
-                type="xlsx",
-                accept_multiple_files=False,
+        else:
+            with col_bar:
+                st.plotly_chart(visualize_barplot(df_upload), key="upload_bar")
+            show_assessment(
+                visualize_polar_barplots(df_upload), df_upload, key="upload"
             )
-        if uploaded_xlsx is not None:
-            try:
-                df_upload = uploaded_assessment(uploaded_xlsx.getvalue())
-            except ValueError as err:
-                st.error(f"The uploaded file is no valid FAIR assessment. {err}")
-            else:
-                with col_bar:
-                    st.plotly_chart(visualize_barplot(df_upload), key="upload_bar")
-                show_assessment(
-                    visualize_polar_barplots(df_upload), df_upload, key="upload"
-                )
 
 if tab_models.open:
     with tab_models:

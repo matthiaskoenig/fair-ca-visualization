@@ -1,5 +1,8 @@
 """Headless run of the Streamlit app."""
 
+import io
+
+import pandas as pd
 from streamlit.testing.v1 import AppTest
 from streamlit.testing.v1.element_tree import FileUploader
 
@@ -39,7 +42,32 @@ def test_only_the_selected_tab_runs() -> None:
     # the About tab is the default; the widgets of the other tabs are not created
     at = app()
     assert not at.selectbox
-    assert not at.get("file_uploader")
+    assert len(at.get("plotly_chart")) == 2
+
+
+def test_upload_is_kept_on_every_tab() -> None:
+    # the uploader exists on every tab, so an upload survives switching tabs
+    for tab in ["About", "Example Assessments", "Indicators"]:
+        assert file_uploader(app(tab=tab))
+
+
+def test_no_stray_text() -> None:
+    # a bare string literal would be rendered by streamlit's magic
+    at = app()
+    texts = [element.value for element in at.markdown]
+    assert not [text for text in texts if "shown on the About tab" in text]
+
+
+def test_error_messages_are_escaped() -> None:
+    at = app(tab="Assess Model")
+    content = (ASSESSMENTS_PATH / "PMR_curated.xlsx").read_bytes()
+    df = pd.read_excel(io.BytesIO(content))
+    df.loc[0, "ID"] = "![x](https://example.org/x.png)"
+    upload = io.BytesIO()
+    df.to_excel(upload, index=False)
+    file_uploader(at).set_value(("assessment.xlsx", upload.getvalue(), XLSX))
+    at.run()
+    assert "\\!\\[x\\]" in at.error[0].value
 
 
 def test_every_example_model_renders() -> None:
