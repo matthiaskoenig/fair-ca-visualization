@@ -1,0 +1,8 @@
+/* A table of contents entry of the API reference is the symbol icon, a
+   non-breaking space and the name. A long name wraps inside the word, so the
+   wrapped part is indented to start below the name instead of the icon. */
+.md-nav .md-typeset:has(> .doc-symbol-toc) {
+  display: block;
+  padding-left: 2em;
+  text-indent: -2em;
+}
