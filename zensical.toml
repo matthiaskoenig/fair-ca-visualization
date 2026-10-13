@@ -7,6 +7,7 @@ copyright = 'Copyright &copy; 2024-2026 <a href="https://livermetabolism.com">Ma
 repo_url = "https://github.com/matthiaskoenig/fair-ca-visualization"
 repo_name = "matthiaskoenig/fair-ca-visualization"
 edit_uri = "edit/develop/docs/"
+extra_css = ["stylesheets/extra.css"]
 
 nav = [
   { "Home" = "index.md" },
