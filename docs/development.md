@@ -119,7 +119,7 @@ Publishing needs a one-time setup: the [trusted publisher](https://docs.pypi.org
    uvx bump-my-version bump minor --dry-run -vv   # or major, patch
    uvx bump-my-version bump minor
    ```
-   This updates `src/fairvis/__init__.py`, `CITATION.cff` and `tests/test_package.py` and commits, without a tag: the pull request rewrites the commit.
+   This updates `pyproject.toml`, `uv.lock`, `src/fairvis/__init__.py`, `CITATION.cff` and `tests/test_package.py` and commits, without a tag: the pull request rewrites the commit.
 5. Push the branch, open a pull request against `develop` and merge it once green.
 6. Tag the merged commit on `develop`:
    ```bash

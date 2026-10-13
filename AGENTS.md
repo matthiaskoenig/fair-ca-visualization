@@ -1,6 +1,6 @@
 # fair-ca-visualization
 
-Interactive visualization of the FAIR COMBINE Archive Indicators (FAIR-CA): a Streamlit app deployed at https://faircombine.streamlit.app and the python package `fair-ca-visualization` (import `fairvis`, console script `fairvis`) on PyPI. Python 3.14, src layout, built with hatchling; the version is in `src/fairvis/__init__.py`. The documentation at https://matthiaskoenig.github.io/fair-ca-visualization is built with Zensical from `docs/`.
+Interactive visualization of the FAIR COMBINE Archive Indicators (FAIR-CA): a Streamlit app deployed at https://faircombine.streamlit.app and the python package `fair-ca-visualization` (import `fairvis`, console script `fairvis`) on PyPI. Python 3.14, src layout, built with hatchling; the version is in `pyproject.toml` and `src/fairvis/__init__.py`, kept equal by bump-my-version. The documentation at https://matthiaskoenig.github.io/fair-ca-visualization is built with Zensical from `docs/`.
 
 ## Commands
 

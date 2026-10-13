@@ -18,6 +18,22 @@ message = "Bump version: {current_version} to {new_version}"
 commit_args = ""
 
 [[tool.bumpversion.files]]
+filename = "./pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "./uv.lock"
+search = """
+name = "fair-ca-visualization"
+version = "{current_version}"
+"""
+replace = """
+name = "fair-ca-visualization"
+version = "{new_version}"
+"""
+
+[[tool.bumpversion.files]]
 filename = "./src/fairvis/__init__.py"
 
 [[tool.bumpversion.files]]
