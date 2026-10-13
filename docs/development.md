@@ -127,6 +127,6 @@ Publishing needs a one-time setup: the [trusted publisher](https://docs.pypi.org
    git tag x.y.z && git push origin x.y.z
    ```
    A tag can neither be moved nor deleted, see [Repository policies](#repository-policies).
-7. The `CI-CD` workflow tests, checks that the tag equals the version and that the release notes exist, publishes to PyPI, creates the GitHub release and fast-forwards `main`. Streamlit Community Cloud then redeploys [faircombine.streamlit.app](https://faircombine.streamlit.app).
+7. The `CI-CD` workflow tests, checks that the tagged commit is on `develop`, that the tag equals the version and that the release notes exist, publishes to PyPI, creates the GitHub release and fast-forwards `main`. Streamlit Community Cloud then redeploys [faircombine.streamlit.app](https://faircombine.streamlit.app).
 8. Check the release: `uv tool install --force fair-ca-visualization==x.y.z && fairvis`, and every tab of the production app.
 9. Once Zenodo has archived the release, open a pull request which sets `date-released` in `CITATION.cff`.
