@@ -1,0 +1,3 @@
+# fairvis.visualization
+
+::: fairvis.visualization

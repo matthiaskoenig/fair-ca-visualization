@@ -1,21 +1,43 @@
-.vscode
+# python
+__pycache__/
 *.pyc
-*~
-.DS_Store
 .eggs/
-dist
-build
-.idea
-cover/
+
+# packaging artifacts (hatchling builds into dist/)
+dist/
+build/
+wheels/
+
+# environments and caches
+.venv/
 .tox/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
 .cache/
 .benchmark
 
-wheels
-__pycache__
-.pytest_cache
+# documentation build (zensical builds into site/)
+site/
+
+# streamlit secrets are never committed
+.streamlit/secrets.toml
+
+# agent working files
+.superpowers/
+docs/superpowers/
+.claude/plans/
+.claude/specs/
+
+# editors and operating systems
+.idea/
+.vscode/
+*~
+.DS_Store
 .Rhistory
+
+# lock files of open office documents
 *.tsv#
 *.xlsx#
-
-# .venv
+~$*.xlsx

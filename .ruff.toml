@@ -1,0 +1,41 @@
+line-length = 88
+indent-width = 4
+target-version = "py314"
+
+[lint]
+select = [
+    "E4", "E7", "E9", "F",  # pycodestyle errors and pyflakes
+    "W",    # pycodestyle warnings
+    "I",    # isort
+    "D",    # pydocstyle
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "SIM",  # flake8-simplify
+    "RET",  # flake8-return
+    "G",    # flake8-logging-format
+    "PIE",  # flake8-pie
+    "RUF",  # ruff specific rules
+]
+ignore = [
+    # ambiguous unicode characters, e.g., the umlaut of König
+    "RUF001", "RUF002", "RUF003",
+]
+fixable = ["ALL"]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[lint.per-file-ignores]
+# tests are documented by their names
+"tests/**" = ["D"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
+
+[lint.pydocstyle]
+convention = "google"

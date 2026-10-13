@@ -1,68 +1,51 @@
-![fair-ca-visualization logo](https://github.com/matthiaskoenig/fair-ca-visualization/raw/main/docs/fair-ca-logo.png)
+![fair-ca-visualization logo](https://github.com/matthiaskoenig/fair-ca-visualization/raw/develop/docs/images/fair-ca-logo.png)
 
 # fair-ca-visualization
-Computational models are essential tools for studying complex systems which,
-particularly in clinical settings, need to be quality-approved and transparent.
-A community-driven approach to enhance the transparency and communication of
-model features is adherence to the principles of Findability, Accessibility,
-Interoperability and Reusability (FAIR). We propose here an adaptation of the
-FAIR indicators published by the Research Data Alliance to assess the
-FAIRness of models encoded in domain-specific standards, such as those
-established by [COMBINE](https://co.mbine.org).
+
+[![GitHub Actions CI/CD Status](https://github.com/matthiaskoenig/fair-ca-visualization/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/matthiaskoenig/fair-ca-visualization/actions/workflows/ci-cd.yml) [![Documentation](https://img.shields.io/badge/docs-fair--ca--visualization-008080.svg)](https://matthiaskoenig.github.io/fair-ca-visualization) [![Version](https://img.shields.io/pypi/v/fair-ca-visualization.svg)](https://pypi.org/project/fair-ca-visualization/) [![Python Versions](https://img.shields.io/pypi/pyversions/fair-ca-visualization.svg)](https://pypi.org/project/fair-ca-visualization/) [![MIT License](https://img.shields.io/pypi/l/fair-ca-visualization.svg)](https://opensource.org/licenses/MIT) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
+
+Computational models are essential tools for studying complex systems which, particularly in clinical settings, need to be quality-approved and transparent. A community-driven approach to enhance the transparency and communication of model features is adherence to the principles of Findability, Accessibility, Interoperability and Reusability (FAIR). The FAIR COMBINE Archive Indicators (FAIR-CA) adapt the FAIR indicators published by the Research Data Alliance to assess the FAIRness of models encoded in domain-specific standards, such as those established by [COMBINE](https://co.mbine.org).
 
 The FAIR COMBINE Archive Indicators project is available from [https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io](https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io).
 
-The visualization tool is available from: https://faircombine.streamlit.app/
+`fair-ca-visualization` visualizes FAIR-CA assessments interactively. The app is available from https://faircombine.streamlit.app, the documentation from https://matthiaskoenig.github.io/fair-ca-visualization.
 
-[![./docs/fair-ca-example.png](./docs/fair-ca-example.png)](https://faircombine.streamlit.app/)
+[![The fair-ca-visualization app](https://github.com/matthiaskoenig/fair-ca-visualization/raw/develop/docs/images/fair-ca-example.png)](https://faircombine.streamlit.app)
+
+# Installation
+
+To run the app locally, install the package from [PyPI](https://pypi.org/project/fair-ca-visualization/) (python 3.14) and start it with `fairvis`:
+
+```bash
+uv tool install fair-ca-visualization
+fairvis
+```
+
+See the [installation guide](https://matthiaskoenig.github.io/fair-ca-visualization/installation/) for pip and for running from a checkout, and [contributing](https://matthiaskoenig.github.io/fair-ca-visualization/development/) for the development setup.
 
 # How to cite
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
 
-# Local installation
-The app has been implemented as a streamlit application and can be run locally.
+> König M. fair-ca-visualization: interactive visualization of the FAIR COMBINE Archive Indicators. Zenodo. [doi:10.5281/zenodo.13755820](https://doi.org/10.5281/zenodo.13755820)
 
-Clone the repository
-```bash
-git clone https://github.com/matthiaskoenig/fair-ca-visualization.git
-cd fair-ca-visualization
-```
-
-Setup environment
-```bash
-uv sync
-```
-
-Run the application
-```bash
-uv run streamlit run src/fairvis/app.py
-```
-or use the shortcut
-```bash
-./run_app.sh
-```
-
-# Development
-## Setup pre-commit
-```bash
-uv pip install pre-commit
-uv run pre-commit install
-uv run pre-commit run
+```bibtex
+@software{fair_ca_visualization,
+  author    = {König, Matthias},
+  title     = {fair-ca-visualization: interactive visualization of the FAIR COMBINE Archive Indicators},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.13755820},
+  url       = {https://doi.org/10.5281/zenodo.13755820}
+}
 ```
 
 # License
 
-* Source Code: [MIT](https://opensource.org/license/MIT)
-* Documentation: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+- Source Code: [MIT](https://opensource.org/license/MIT)
+- Documentation: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 # Funding
-Matthias König (MK) was supported by the Federal Ministry of Education and Research
-(BMBF, Germany) within the research network Systems Medicine of the Liver
-(LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of
-Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and
-by the German Research Foundation (DFG) within the Research Unit Program FOR 5151
-QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection -
-A Systems Medicine Approach) by grant number 436883643 and by grant number
-465194077 (Priority Programme SPP 2311, Subproject SimLivA).
+
+Matthias König (MK) was supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach) by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
 © 2024 - 2026 Matthias König

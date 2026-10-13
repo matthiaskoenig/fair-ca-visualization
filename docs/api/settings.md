@@ -1,0 +1,3 @@
+# fairvis.settings
+
+::: fairvis.settings

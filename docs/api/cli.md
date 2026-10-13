@@ -1,0 +1,3 @@
+# fairvis.cli
+
+::: fairvis.cli

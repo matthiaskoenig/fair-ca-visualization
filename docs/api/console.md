@@ -1,0 +1,3 @@
+# fairvis.console
+
+::: fairvis.console

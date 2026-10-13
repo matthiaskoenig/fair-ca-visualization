@@ -1,17 +1,10 @@
-"""Example to test visualization."""
+"""Example showing the figures of a bundled assessment in the browser."""
 
-from data_io import load_assessment
-from settings import DATA_PATH
-from visualization import visualize_barplot
+from fairvis.data_io import load_assessment
+from fairvis.settings import ASSESSMENTS_PATH
+from fairvis.visualization import visualize_barplot, visualize_polar_barplots
 
 if __name__ == "__main__":
-    model_id = "BioModels_curated"
-    df = load_assessment(DATA_PATH / "assessments" / f"{model_id}.xlsx")
-
-    # barplot
-    fig = visualize_barplot(df)
-    fig.show()
-
-    # polar barplots
-    # figs, keys = visualize_polar_barplots(df)
-    # figs[0].show()
+    df = load_assessment(ASSESSMENTS_PATH / "BioModels_curated.xlsx")
+    visualize_barplot(df).show()
+    visualize_polar_barplots(df)[0].show()
