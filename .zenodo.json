@@ -1,20 +1,21 @@
 {
   "upload_type": "software",
-  "title": "fair-ca-visualization: FAIR-CA Visualization for COMBINE indicators",
+  "title": "fair-ca-visualization: interactive visualization of the FAIR COMBINE Archive Indicators",
   "creators": [
     {
       "orcid": "0000-0003-1725-179X",
-      "affiliation": "Humboldt-University Berlin, Institute for Theoretical Biology, Berlin",
+      "affiliation": "Humboldt-University Berlin, Faculty of Life Science, Institute for Biology, Biology, Berlin; University Lübeck; University Hospital Schleswig-Holstein, Campus Lübeck, First Department of Medicine, Germany",
       "name": "König, Matthias"
     }
   ],
-  "description": "<p>fair-ca-visualization is a collection of python utilities for visualization of FAIR-CA COMBINE indicators with source code available from available from <a href=\"https://github.com/matthiaskoenig/fair-ca-visualization\">https://github.com/matthiaskoenig/fair-ca-visualization</a></p><p>If you have any questions or issues please <a href=\"https://github.com/matthiaskoenig/pymetadata/issues\">open an issue</a></p><h2>Funding</h2><p>Matthias König (MK) was supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach) by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).</p>",
+  "description": "<p><code>fair-ca-visualization</code> is a Streamlit app and python package for the interactive visualization of assessments of computational models with the FAIR COMBINE Archive Indicators (FAIR-CA). The app is available from <a href=\"https://faircombine.streamlit.app\">https://faircombine.streamlit.app</a>, the package from <a href=\"https://pypi.org/project/fair-ca-visualization\">PyPI</a>, the source code from <a href=\"https://github.com/matthiaskoenig/fair-ca-visualization\">https://github.com/matthiaskoenig/fair-ca-visualization</a> and the documentation from <a href=\"https://matthiaskoenig.github.io/fair-ca-visualization\">https://matthiaskoenig.github.io/fair-ca-visualization</a>.</p><p>If you have any questions or issues please <a href=\"https://github.com/matthiaskoenig/fair-ca-visualization/issues\">open an issue</a>.</p><h2>Funding</h2><p>Matthias König (MK) was supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach) by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).</p>",
   "access_right": "open",
-  "license": "LGPL-3.0",
+  "license": "MIT",
   "keywords": [
-    "FAIR",
+    "modeling",
     "standardization",
     "COMBINE",
+    "FAIR",
     "indicators"
   ]
 }
