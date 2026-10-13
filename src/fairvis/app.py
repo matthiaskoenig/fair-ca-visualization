@@ -9,19 +9,25 @@ the query parameter `tab`, so a tab can be linked to directly, e.g.
 
 import io
 import re
+from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from fairvis import __version__
+from fairvis import SOFTWARE_DOI, __version__
 from fairvis.data_io import load_assessment, load_indicators, load_model_assessments
+from fairvis.export import (
+    EXPORT_FORMATS,
+    browser_available,
+    combined_figure,
+    figure_bytes,
+)
 from fairvis.settings import LOGO_PATH, TEMPLATE_PATH
 from fairvis.visualization import visualize_barplot, visualize_polar_barplots
 
 DOCS_URL = "https://matthiaskoenig.github.io/fair-ca-visualization"
 REPOSITORY_URL = "https://github.com/matthiaskoenig/fair-ca-visualization"
-SOFTWARE_DOI = "10.5281/zenodo.13755820"
 PAPER_DOI = "10.1038/s41540-026-00828-7"
 PAPER_CITATION = (
     "Balaur I., Nickerson D.P., Welter D., Wodke J.A.H., Ancien F., Gebhardt T., "
@@ -150,6 +156,49 @@ def show_assessment(figs_polar: list[go.Figure], df: pd.DataFrame, key: str) -> 
     st.dataframe(df, width="stretch")
 
 
+def export_figure(df: pd.DataFrame, name: str, key: str) -> None:
+    """Download of the figure of an assessment, rendered on click.
+
+    The figure is rendered in a thread of its own, outside of the script run, so
+    no streamlit cache is used: a session-scoped cache cannot be read there.
+
+    Args:
+        df: the assessment.
+        name: name of the assessed model, in the title and the file name.
+        key: prefix of the element keys, unique per tab.
+    """
+    available = browser_available()
+    col_format, col_download = st.columns([1, 1], vertical_alignment="bottom")
+    with col_format:
+        fmt = st.segmented_control(
+            "Export format",
+            options=list(EXPORT_FORMATS),
+            format_func=str.upper,
+            default="png",
+            required=True,
+            key=f"{key}_format",
+        )
+    with col_download:
+        st.download_button(
+            "Export figure",
+            lambda: figure_bytes(combined_figure(df, name), fmt),
+            file_name=f"{name}_FAIR-CA.{fmt}",
+            mime=EXPORT_FORMATS[fmt],
+            on_click="ignore",
+            icon=":material/image:",
+            disabled=not available,
+            help=None
+            if available
+            else "The export needs Chrome or Chromium on the server running the app.",
+            key=f"{key}_export",
+        )
+    st.caption(
+        "The bar plot and the polar bar plots as one figure, e.g. for a manuscript. "
+        f"It states the version of the app, fair-ca-visualization {__version__}; "
+        "please cite it as described on the About tab."
+    )
+
+
 df_indicators, models = load_data()
 
 st.title("Visualize FAIR COMBINE Archive Indicators", anchor=False)
@@ -223,6 +272,7 @@ with tab_assessment:
             key="upload",
         )
     if tab_assessment.open and uploaded_xlsx is not None:
+        upload_name = Path(uploaded_xlsx.name).stem
         try:
             df_upload = uploaded_assessment(uploaded_xlsx.getvalue())
         except ValueError as err:
@@ -231,6 +281,8 @@ with tab_assessment:
                 + escape_markdown(str(err))
             )
         else:
+            with col_upload:
+                export_figure(df_upload, upload_name, key="upload")
             with col_bar:
                 st.plotly_chart(visualize_barplot(df_upload), key="upload_bar")
             show_assessment(
@@ -247,6 +299,7 @@ if tab_models.open:
                 key="model",
                 bind="query-params",
             )
+            export_figure(models[model_id], model_id, key="models")
         fig_bar, figs_polar = example_figures(model_id)
         with col_bar:
             st.plotly_chart(fig_bar, key="models_bar")

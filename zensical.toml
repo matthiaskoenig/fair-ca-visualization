@@ -23,6 +23,7 @@ nav = [
       { "cli" = "api/cli.md" },
       { "data_io" = "api/data_io.md" },
       { "visualization" = "api/visualization.md" },
+      { "export" = "api/export.md" },
       { "settings" = "api/settings.md" },
       { "console" = "api/console.md" },
     ] },

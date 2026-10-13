@@ -37,6 +37,12 @@ assert load_model_assessments(), "no bundled assessments"
 at = AppTest.from_file(str(APP_PATH), default_timeout=120).run()
 assert not at.exception, at.exception
 print("app ok:", APP_PATH)
+
+from fairvis.export import combined_figure, figure_bytes
+
+model_id, df = next(iter(load_model_assessments().items()))
+assert figure_bytes(combined_figure(df, model_id), "pdf").startswith(b"%PDF")
+print("export ok")
 PY
 
 echo "start the server with the console script"
