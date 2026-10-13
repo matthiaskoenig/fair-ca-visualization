@@ -105,3 +105,21 @@ def test_load_indicators_counts() -> None:
     for value in values:
         expected[assessment_class(value)] += 1.0
     assert df_indicators.loc[first_id, "Assessment"] == expected
+
+
+def test_assessment_class_number_stored_as_text() -> None:
+    with pytest.raises(ValueError, match="stored as text"):
+        assessment_class("1")
+
+
+def test_load_indicators_counts_by_id_not_position() -> None:
+    models = load_model_assessments()
+    shuffled = {model_id: df.iloc[::-1] for model_id, df in models.items()}
+    pd.testing.assert_frame_equal(load_indicators(shuffled), load_indicators(models))
+
+
+def test_load_indicators_rejects_other_indicators() -> None:
+    models = load_model_assessments()
+    model_id, df = next(iter(models.items()))
+    with pytest.raises(ValueError, match=model_id):
+        load_indicators({model_id: df.iloc[1:]})

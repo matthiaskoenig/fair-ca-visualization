@@ -109,6 +109,8 @@ Markdown is not hard wrapped: every paragraph and list item is one line.
 
 A release publishes the package to PyPI, creates the GitHub release, which [Zenodo](https://doi.org/10.5281/zenodo.13755820) archives, and updates the app on Streamlit Community Cloud. Versions follow [semantic versioning](https://semver.org); tags are the bare version, e.g., `0.4.0`.
 
+Publishing needs a one-time setup: the [trusted publisher](https://docs.pypi.org/trusted-publishers/) of the project `fair-ca-visualization` on pypi.org for the repository `matthiaskoenig/fair-ca-visualization`, the workflow `ci-cd.yml` and the environment `pypi`. It is registered; it has to be renewed only if the workflow file or the environment is renamed.
+
 1. Create the release branch: `git switch -c release/x.y.z develop`.
 2. Write `release-notes/x.y.z.md`, see the earlier notes for the format.
 3. Run the checks: `uv run pytest -n auto`, `uv run ruff check`, `uv run ty check`.

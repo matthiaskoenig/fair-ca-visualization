@@ -24,4 +24,4 @@ The assessments bundled with the app, e.g., curated and non curated models of Bi
 
 ## Indicators
 
-All indicators of the template with their identifier, type, category, priority and description. The column **FAIR Assessment** shows how many of the example assessments rate the indicator as NA, 0, 0.5 and 1.
+All indicators of the template with their identifier, short label, type, category, subcategory, priority and the question the indicator asks. The column **FAIR Assessment** shows how many of the example assessments rate the indicator as NA, 0, 0.5 and 1.

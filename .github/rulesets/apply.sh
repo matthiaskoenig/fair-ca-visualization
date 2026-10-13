@@ -50,6 +50,14 @@ JSON
   fi
 }
 
+# GitHub Pages is built by the documentation workflow, not from a branch
+if gh api "repos/${REPO}/pages" --silent 2>/dev/null; then
+  gh api -X PUT "repos/${REPO}/pages" -f build_type=workflow --silent
+else
+  gh api -X POST "repos/${REPO}/pages" -f build_type=workflow --silent
+fi
+echo "GitHub Pages built by GitHub Actions"
+
 # the documentation workflow deploys from develop
 ensure_policy github-pages develop branch
 # the release workflow publishes to PyPI from a tag

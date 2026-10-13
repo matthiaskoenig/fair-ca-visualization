@@ -11,6 +11,13 @@ set -euo pipefail
 WHEEL="$1"
 PORT="${PORT:-8599}"
 VENV="$(mktemp -d)/venv"
+PID=""
+# the environment is removed and the server stopped however the script ends
+cleanup() {
+  if [[ -n "${PID}" ]]; then kill "${PID}" 2>/dev/null || true; fi
+  rm -rf "$(dirname "${VENV}")"
+}
+trap cleanup EXIT
 
 uv venv --quiet --python 3.14 "${VENV}"
 uv pip install --quiet --python "${VENV}/bin/python" "${WHEEL}"
@@ -35,7 +42,6 @@ PY
 echo "start the server with the console script"
 "${VENV}/bin/fairvis" --server.headless=true --server.port="${PORT}" &
 PID=$!
-trap 'kill "${PID}" 2>/dev/null || true; rm -rf "$(dirname "${VENV}")"' EXIT
 curl --silent --fail --retry 30 --retry-delay 2 --retry-all-errors \
   "http://localhost:${PORT}/_stcore/health"
 echo

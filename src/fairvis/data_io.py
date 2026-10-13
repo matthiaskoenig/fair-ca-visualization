@@ -46,7 +46,19 @@ def assessment_class(value: object) -> int:
         for k, reference in enumerate(ASSESSMENT_VALUES, start=1):
             if np.isclose(number, reference):
                 return k
+    if isinstance(value, str) and _is_number(value):
+        raise ValueError(
+            f"assessment value {value!r} is stored as text, enter it as a number"
+        )
     raise ValueError(f"assessment value {value!r} is none of NA, 0, 0.5, 1")
+
+
+def _is_number(text: str) -> bool:
+    try:
+        float(text)
+    except ValueError:
+        return False
+    return True
 
 
 def validate_assessment(df: pd.DataFrame) -> None:
@@ -80,7 +92,7 @@ def load_assessment(source: Path | BinaryIO) -> pd.DataFrame:
 
     Returns:
         assessment indexed by the indicator `ID`, without the description columns
-        and without empty unnamed columns.
+        and without columns lacking a header (named `Unnamed: <n>` by pandas).
 
     Raises:
         ValueError: if the file is no readable xlsx file or no valid assessment.
@@ -122,6 +134,9 @@ def load_indicators(df_models: dict[str, pd.DataFrame]) -> pd.DataFrame:
     Returns:
         indicators indexed by `ID`; the column `Assessment` holds the number of
         models with NA, 0, 0.5 and 1 for the indicator.
+
+    Raises:
+        ValueError: if an assessment has other indicators than the template.
     """
     df_indicators = (
         pd.read_excel(TEMPLATE_PATH, sheet_name=0)
@@ -129,8 +144,13 @@ def load_indicators(df_models: dict[str, pd.DataFrame]) -> pd.DataFrame:
         .drop(columns=["Description", "Assessment details", "Assessment", "Comment"])
     )
     assessments = [[0.0, 0.0, 0.0, 0.0] for _ in range(len(df_indicators))]
-    for df_model in df_models.values():
-        for k, value in enumerate(df_model["Assessment"].to_numpy()):
+    for model_id, df_model in df_models.items():
+        if not df_model.index.sort_values().equals(df_indicators.index.sort_values()):
+            raise ValueError(
+                f"The assessment '{model_id}' has other indicators than the template."
+            )
+        values = df_model["Assessment"].reindex(df_indicators.index).to_numpy()
+        for k, value in enumerate(values):
             assessments[k][assessment_class(value)] += 1.0
 
     df_indicators["Assessment"] = assessments
