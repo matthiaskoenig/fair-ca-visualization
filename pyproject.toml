@@ -4,7 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fair-ca-visualization"
-dynamic = ["version"]
+# a static version: uv.lock records it, the uv of Streamlit Community Cloud
+# cannot parse a uv.lock without it; kept current by bump-my-version
+version = "0.4.1"
 description = "Interactive visualization of the FAIR COMBINE Archive Indicators (FAIR-CA) for computational models."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -67,9 +69,6 @@ dev = [
 	"ty>=0.0.84",
 	"zensical>=0.0.67",
 ]
-
-[tool.hatch.version]
-path = "./src/fairvis/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 # the import package differs from the distribution name fair-ca-visualization
