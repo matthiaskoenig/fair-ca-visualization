@@ -14,6 +14,8 @@ from fairvis.settings import APP_PATH
 
 STREAMLIT_OPTIONS: tuple[str, ...] = (
     "--browser.gatherUsageStats=false",
+    "--client.showErrorDetails=type",
+    "--server.maxUploadSize=1",
     "--theme.base=light",
 )
 """Default options of `streamlit run`, the same as in `.streamlit/config.toml`."""

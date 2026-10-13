@@ -17,6 +17,8 @@ fairvis
 fairvis --server.port 8502
 ```
 
+The defaults are the ones of the deployed app: no usage statistics, the light theme, uploads of at most 1 MB and errors shown without traceback. An option overrides its default, e.g., `fairvis --client.showErrorDetails=full` for the full traceback.
+
 Without uv, install with pip into a virtual environment:
 
 ```bash

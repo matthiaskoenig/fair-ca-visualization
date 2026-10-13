@@ -3,6 +3,8 @@
 import os
 import subprocess
 import sys
+import tomllib
+from pathlib import Path
 
 import pytest
 
@@ -15,6 +17,18 @@ def test_streamlit_argv_defaults() -> None:
     assert argv[:3] == ["streamlit", "run", str(APP_PATH)]
     assert "--browser.gatherUsageStats=false" in argv
     assert "--theme.base=light" in argv
+
+
+def test_options_of_the_repository_config() -> None:
+    # `fairvis` runs the app with the options of .streamlit/config.toml
+    path = Path(__file__).parents[1] / ".streamlit" / "config.toml"
+    config = tomllib.loads(path.read_text(encoding="utf-8"))
+    options = {
+        f"--{section}.{name}={str(value).lower()}"
+        for section, values in config.items()
+        for name, value in values.items()
+    }
+    assert options == set(cli.STREAMLIT_OPTIONS)
 
 
 def test_user_options_follow_defaults() -> None:

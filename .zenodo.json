@@ -17,5 +17,13 @@
     "COMBINE",
     "FAIR",
     "indicators"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.1038/s41540-026-00828-7",
+      "relation": "isSupplementTo",
+      "scheme": "doi",
+      "resource_type": "publication-article"
+    }
   ]
 }

@@ -1,6 +1,6 @@
 # Assessing a model
 
-An assessment is the FAIR assessment template, `FAIR_assessment_template.xlsx`, with the column `Assessment` filled in. Download it in the app (**Assess Model**, **Download FAIR Template**) or from [the repository](https://github.com/matthiaskoenig/fair-ca-visualization/raw/develop/src/fairvis/data/FAIR_assessment_template.xlsx).
+An assessment is the FAIR assessment template, `FAIR_assessment_template.xlsx`, with the column `Assessment` filled in. Download it in the app (**Assess Model**, **Download FAIR template**) or from [the repository](https://github.com/matthiaskoenig/fair-ca-visualization/raw/develop/src/fairvis/data/FAIR_assessment_template.xlsx).
 
 ## Columns
 
@@ -31,4 +31,4 @@ Keep the rows and the columns of the template; only fill in `Assessment` and, if
 | `0.5` | partially fulfilled |
 | `1` | fulfilled |
 
-The bar plot shows per category the sum of the assessments divided by the number of indicators of the category, in percent; NA counts as not fulfilled.
+The bar plot shows per category the sum of the assessments divided by the number of applicable indicators of the category, in percent. An indicator with NA does not apply to the model and is not counted, so it neither raises nor lowers the percentage; a category in which no indicator applies has no bar. The polar bar plots draw an NA indicator as a full gray bar, so that it is distinguishable from an indicator assessed with 0, which has no bar.

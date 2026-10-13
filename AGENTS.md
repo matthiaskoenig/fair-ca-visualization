@@ -19,11 +19,11 @@ uv run pre-commit install                  # once per checkout
 
 ## Architecture
 
-- `src/fairvis/app.py`: the Streamlit app with the tabs About, Assess Model, Example Assessments, Indicators. Streamlit Community Cloud runs this file from `main`; keep its path.
-- `src/fairvis/data_io.py`: loads assessments (xlsx, first sheet, index `ID`), validates required columns and values (NA, 0, 0.5, 1) with `ValueError`, counts the assessments per indicator.
+- `src/fairvis/app.py`: the Streamlit app with the tabs About, Assess Model, Example Assessments, Indicators; only the selected tab runs, the tab is bound to the query parameter `tab`. Streamlit Community Cloud runs this file from `main`; keep its path.
+- `src/fairvis/data_io.py`: loads assessments (xlsx, first sheet, index `ID`), validates required columns, the indicators of the template and the values (NA, 0, 0.5, 1) with `ValueError`, counts the assessments per indicator.
 - `src/fairvis/visualization.py`: plotly bar plot per category and polar bar plots per indicator type.
 - `src/fairvis/cli.py`: the `fairvis` script, runs `streamlit run` on the packaged `app.py` with the options of `.streamlit/config.toml`.
-- `src/fairvis/settings.py`: paths inside the package. `src/fairvis/data/` holds the template `FAIR_assessment_template.xlsx` and the example assessments `assessments/*.xlsx`, bundled in the wheel.
+- `src/fairvis/settings.py`: paths inside the package. `src/fairvis/data/` holds the template `FAIR_assessment_template.xlsx`, the logo `fair-ca-logo.png` and the example assessments `assessments/*.xlsx`, bundled in the wheel.
 - `tests/`: pytest; `tests/test_app.py` runs the app headless with `streamlit.testing.v1.AppTest`.
 
 ## Conventions
