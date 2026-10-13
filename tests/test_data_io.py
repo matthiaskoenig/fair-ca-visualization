@@ -2,6 +2,7 @@
 
 import io
 import math
+import re
 from collections.abc import Callable
 
 import pandas as pd
@@ -29,7 +30,7 @@ def test_assessment_class(value: object, expected: int) -> None:
 
 @pytest.mark.parametrize("value", [0.75, -1.0, 2.0, "yes", None, True])
 def test_assessment_class_invalid(value: object) -> None:
-    with pytest.raises(ValueError, match="none of NA, 0, 0.5, 1"):
+    with pytest.raises(ValueError, match=re.escape("none of NA, 0, 0.5, 1")):
         assessment_class(value)
 
 

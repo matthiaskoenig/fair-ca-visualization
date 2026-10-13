@@ -9,7 +9,7 @@ from fairvis import settings
 def test_data_is_inside_the_package() -> None:
     package = Path(fairvis.__file__).parent
     assert settings.DATA_PATH.parent == package
-    assert settings.APP_PATH == package / "app.py"
+    assert package / "app.py" == settings.APP_PATH
 
 
 def test_bundled_files_exist() -> None:

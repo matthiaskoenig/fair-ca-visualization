@@ -5,7 +5,12 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-SUBSET_KEYS: tuple[str, ...] = ("Model", "Model metadata", "Archive", "Archive metadata")
+SUBSET_KEYS: tuple[str, ...] = (
+    "Model",
+    "Model metadata",
+    "Archive",
+    "Archive metadata",
+)
 """Types of indicators, one polar figure each."""
 
 COLOR_DISCRETE_SEQUENCE: tuple[str, ...] = (
@@ -35,15 +40,13 @@ def visualize_barplot(df_data: pd.DataFrame) -> go.Figure:
     # Count the fraction of indicators fullfilled per category
     categories = df_data["Category"].unique()
 
-    values = {k: 0 for k in categories}
-    totals = {k: 0 for k in categories}
+    values = dict.fromkeys(categories, 0.0)
+    totals = dict.fromkeys(categories, 0.0)
     for _, row in df_data.iterrows():
         category = row["Category"]
         assessment = row["Assessment"]
         totals[category] += 1.0
-        if np.isnan(assessment):
-            continue
-        else:
+        if not np.isnan(assessment):
             values[category] += assessment
 
     items = []
@@ -66,7 +69,7 @@ def visualize_barplot(df_data: pd.DataFrame) -> go.Figure:
         y="percentage",
         color="category",  # title="FAIR assessment",
         color_discrete_sequence=list(COLOR_DISCRETE_SEQUENCE),
-        labels=dict(category="Category", percentage="FAIR [%]"),
+        labels={"category": "Category", "percentage": "FAIR [%]"},
     )
     fig.update_layout(
         title="FAIR assessment",

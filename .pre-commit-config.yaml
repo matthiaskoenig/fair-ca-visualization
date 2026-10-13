@@ -1,16 +1,25 @@
-# This is run as a precondition to commits, run manually via `pre-commit run`
+# Checks run before every commit, see `docs/development.md`.
+# Install once per checkout with `uv run pre-commit install`.
+#
+# A commit only checks the changed files; `pre-commit run --all-files` checks
+# the whole repository, which is what a newly added hook should be tried with.
 
-# When adding new hooks, it may make sense to once run
-# `pre-commit run --all-files` as by default only changed files are checked
+# the bundled xlsx files are binary data, not text
+exclude: ^src/fairvis/data/
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v6.0.0
   hooks:
   - id: check-yaml
     description: Check yaml files for parseable syntax
+  - id: check-toml
+    description: Check toml files for parseable syntax
+  - id: check-json
+    description: Check json files for parseable syntax
   - id: check-added-large-files
     description: Prevent large files from being committed
+    args: [ --maxkb=1000 ]
   - id: check-merge-conflict
     description: Check for files that contain merge conflict strings
   - id: check-symlinks
@@ -21,15 +30,28 @@ repos:
     description: Fix empty lines at ends of files
   - id: detect-private-key
     description: Detects the presence of private keys
+  - id: check-case-conflict
+    description: Check for names which conflict on case insensitive filesystems
+  - id: mixed-line-ending
+    description: Normalize mixed line endings
+    args: [ --fix=lf ]
+  - id: debug-statements
+    description: Check for forgotten breakpoints and debugger imports
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  # Ruff version.
-  rev: v0.8.6
+  # keep equal to the ruff version in uv.lock
+  rev: v0.17.0
   hooks:
-    # Run the linter.
-    - id: ruff
+    - id: ruff-check
       types_or: [ python, pyi ]
       args: [ --fix ]
-    # Run the formatter.
     - id: ruff-format
       types_or: [ python, pyi ]
+
+- repo: https://github.com/astral-sh/ty-pre-commit
+  # keep equal to the ty version in uv.lock
+  rev: v0.0.86
+  hooks:
+    # checks the whole project (see `[tool.ty]` in pyproject.toml) in the
+    # environment uv syncs, which includes the dev group
+    - id: ty
