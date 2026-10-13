@@ -1,15 +1,14 @@
-"""FAIR COMBINE indicator app.
+"""Streamlit app of the FAIR COMBINE Archive Indicators.
 
-Webapp for FAIR indicators.
+Run with `fairvis`, or from a checkout with `streamlit run src/fairvis/app.py`.
 """
-
-from typing import Dict, Tuple
 
 import pandas as pd
 import streamlit as st
-from data_io import load_assessment, load_indicators, load_model_assessments
-from settings import TEMPLATE_PATH
-from visualization import visualize_barplot, visualize_polar_barplots
+
+from fairvis.data_io import load_assessment, load_indicators, load_model_assessments
+from fairvis.settings import TEMPLATE_PATH
+from fairvis.visualization import visualize_barplot, visualize_polar_barplots
 
 st.set_page_config(
     page_title="FAIR-CA-Indicators",
@@ -17,7 +16,7 @@ st.set_page_config(
     layout="wide",
     menu_items={
         "Get help": "mailto:konigmatt@googlemail.com",
-        "Report a bug": "https://github.com/FAIR-CA-indicators/fair-ca-visualization.git/issues/new",
+        "Report a bug": "https://github.com/matthiaskoenig/fair-ca-visualization/issues/new",
         "About": """
         FAIR-CA-Indicators application.
         """,
@@ -39,8 +38,13 @@ st.markdown(
 
 
 @st.cache_data
-def load_data() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame]]:
-    """Load data."""
+def load_data() -> tuple[pd.DataFrame, dict[str, pd.DataFrame]]:
+    """Load the indicators and the example assessments.
+
+    Returns:
+        indicators with the counts of their assessments, and the assessments by
+        model id.
+    """
     df_models = load_model_assessments()
     df_indicators = load_indicators(df_models=df_models)
 
@@ -69,7 +73,7 @@ with tab_about:
     st.markdown(
         """
         ## Motivation
-        Computational models are essential tools for studying complex biological systems. In biomedical and clinical contexts in particular, models must be transparent, well-documented, and reproducible** to ensure reliability and reuse.
+        Computational models are essential tools for studying complex biological systems. In biomedical and clinical contexts in particular, models must be transparent, well-documented, and **reproducible** to ensure reliability and reuse.
 
         A community-driven approach to improving transparency and communication of model characteristics is the adoption of the **FAIR principles**: *Findability, Accessibility, Interoperability, and Reusability*. Building on the FAIR indicators developed by the **Research Data Alliance (RDA)**, we propose an adaptation specifically designed for computational models encoded in domain standards developed within the **[COMBINE](https://co.mbine.org)** community.
 
@@ -154,20 +158,13 @@ with tab_assessment:
             "Upload FAIR model assessment",
             type="xlsx",
             accept_multiple_files=False,
-            key=None,
-            help=None,
-            on_change=None,
-            args=None,
-            kwargs=None,
-            disabled=False,
-            label_visibility="visible",
         )
-        if uploaded_xlsx is None:
-            df_model_upload = None
-
-        else:
-            # Can be used wherever a "file-like" object is accepted:
-            df_model_upload = load_assessment(uploaded_xlsx)
+        df_model_upload: pd.DataFrame | None = None
+        if uploaded_xlsx is not None:
+            try:
+                df_model_upload = load_assessment(uploaded_xlsx)
+            except ValueError as err:
+                st.error(f"The uploaded file is no valid FAIR assessment: {err}")
 
     with col_template:
         st.html(
@@ -175,19 +172,18 @@ with tab_assessment:
             The template for assessment is available here:
             """
         )
-        with open(TEMPLATE_PATH, "rb") as f:
-            st.download_button(
-                "Download FAIR Template",
-                f,
-                file_name="FAIR_assessment_template.xlsx",
-                help="FAIR assessment template. Fill out and reupload for evaluation.",
-            )
+        st.download_button(
+            "Download FAIR Template",
+            TEMPLATE_PATH.read_bytes(),
+            file_name="FAIR_assessment_template.xlsx",
+            help="FAIR assessment template. Fill out and reupload for evaluation.",
+        )
     with col_fair_upload:
         if df_model_upload is not None:
             fig_bar = visualize_barplot(df_data=df_model_upload)
             st.plotly_chart(fig_bar, width="content")
 
-    if uploaded_xlsx is not None:
+    if df_model_upload is not None:
         # plotly plot
         figs = visualize_polar_barplots(df_data=df_model_upload)
         col1, col2 = st.columns(2)

@@ -88,7 +88,7 @@ def load_assessment(source: Path | BinaryIO) -> pd.DataFrame:
     try:
         df = pd.read_excel(source, sheet_name=0)
     except Exception as err:
-        raise ValueError(f"The file is no readable xlsx file ({err}).") from err
+        raise ValueError(f"The file is no readable xlsx file: {err}") from err
     validate_assessment(df)
     unnamed = [column for column in df.columns if str(column).startswith("Unnamed")]
     return df.set_index("ID").drop(

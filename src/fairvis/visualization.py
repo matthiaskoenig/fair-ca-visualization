@@ -1,13 +1,14 @@
-"""Create plots for the indicators."""
-
-from typing import List
+"""Plotly figures of a FAIR assessment."""
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
-subset_keys = ["Model", "Model metadata", "Archive", "Archive metadata"]
-color_discrete_sequence = [
+SUBSET_KEYS: tuple[str, ...] = ("Model", "Model metadata", "Archive", "Archive metadata")
+"""Types of indicators, one polar figure each."""
+
+COLOR_DISCRETE_SEQUENCE: tuple[str, ...] = (
     "#1f77b4",  # muted blue
     "#ff7f0e",  # safety orange
     "#2ca02c",  # cooked asparagus green
@@ -18,20 +19,25 @@ color_discrete_sequence = [
     "#7f7f7f",  # middle gray
     "#bcbd22",  # curry yellow-green
     "#17becf",  # blue-teal
-]
+)
+"""Colors of the categories."""
 
 
-def visualize_barplot(df_data: pd.DataFrame) -> List:
-    """Visualize overall fair assessment as bar plot.
+def visualize_barplot(df_data: pd.DataFrame) -> go.Figure:
+    """Bar plot of the fraction of the indicators fulfilled per category.
 
-    Return figure.
+    Args:
+        df_data: assessment of a model, see `fairvis.data_io.load_assessment`.
+
+    Returns:
+        bar plot with the FAIR percentage per category.
     """
     # Count the fraction of indicators fullfilled per category
     categories = df_data["Category"].unique()
 
     values = {k: 0 for k in categories}
     totals = {k: 0 for k in categories}
-    for key, row in df_data.iterrows():
+    for _, row in df_data.iterrows():
         category = row["Category"]
         assessment = row["Assessment"]
         totals[category] += 1.0
@@ -52,7 +58,6 @@ def visualize_barplot(df_data: pd.DataFrame) -> List:
         )
 
     df = pd.DataFrame(items)
-    # console.print(df)
 
     # barplot
     fig = px.bar(
@@ -60,7 +65,7 @@ def visualize_barplot(df_data: pd.DataFrame) -> List:
         x="category",
         y="percentage",
         color="category",  # title="FAIR assessment",
-        color_discrete_sequence=color_discrete_sequence,
+        color_discrete_sequence=list(COLOR_DISCRETE_SEQUENCE),
         labels=dict(category="Category", percentage="FAIR [%]"),
     )
     fig.update_layout(
@@ -73,41 +78,29 @@ def visualize_barplot(df_data: pd.DataFrame) -> List:
     return fig
 
 
-def visualize_polar_barplots(df_data: pd.DataFrame) -> List:
-    """Visualize single model as polar bar plots.
+def visualize_polar_barplots(df_data: pd.DataFrame) -> list[go.Figure]:
+    """Polar bar plots of the indicators of a model, one per type of indicator.
 
-    Indicators are split based on Model/Archive and metadata.
+    Args:
+        df_data: assessment of a model, see `fairvis.data_io.load_assessment`.
 
-    Return polar figures.
+    Returns:
+        one polar bar plot per entry of `SUBSET_KEYS`, in that order.
     """
-
     figs = []
-    dfs = [df_data[df_data["Type"] == key] for key in subset_keys]
-    # polar barplots
-    for k, df in enumerate(dfs):
-        key = subset_keys[k]
-
+    for key in SUBSET_KEYS:
+        df = df_data[df_data["Type"] == key]
         fig = px.bar_polar(
             df,
             r="Assessment",
             theta="Short",
             color="Category",
             hover_name="Indicator",
-            hover_data=[
-                "Indicator",
-                "Category",
-                "Priority",
-            ],  # "Description", "Priority"
-            color_discrete_sequence=color_discrete_sequence,
+            hover_data=["Indicator", "Category", "Priority"],
+            color_discrete_sequence=list(COLOR_DISCRETE_SEQUENCE),
         )
-        fig.update_layout(
-            title=key,
-            showlegend=True,
-        )
-        fig.update_polars(
-            radialaxis_tickvals=[0, 0.5, 1],
-            angularaxis_showgrid=True,
-        )
+        fig.update_layout(title=key, showlegend=True)
+        fig.update_polars(radialaxis_tickvals=[0, 0.5, 1], angularaxis_showgrid=True)
         figs.append(fig)
 
     return figs
