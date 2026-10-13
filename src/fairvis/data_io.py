@@ -267,7 +267,19 @@ def read_first_sheet(source: Path | BinaryIO) -> pd.DataFrame:
             f"The assessment has more than {MAX_ROWS} rows. "
             "Fill out the FAIR assessment template."
         )
-    df = pd.DataFrame(data, columns=_column_names(header), dtype=object)
+    # the rows of a read only sheet are padded to `max_col`: without the empty
+    # columns at the end, the columns are the ones of the sheet (#21)
+    width = max(
+        (
+            k + 1
+            for row in (header, *data)
+            for k, value in enumerate(row)
+            if value is not None
+        ),
+        default=0,
+    )
+    data = [row[:width] for row in data]
+    df = pd.DataFrame(data, columns=_column_names(header[:width]), dtype=object)
     return df.fillna(np.nan).infer_objects()
 
 
