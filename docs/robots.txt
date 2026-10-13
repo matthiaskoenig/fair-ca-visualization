@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://matthiaskoenig.github.io/fair-ca-visualization/sitemap.xml
+
+# agent facing documentation, see https://llmstxt.org
+# https://matthiaskoenig.github.io/fair-ca-visualization/llms.txt
