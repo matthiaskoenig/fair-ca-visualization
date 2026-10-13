@@ -28,3 +28,32 @@ def test_citation_and_zenodo_agree() -> None:
     assert [creator["orcid"] for creator in zenodo["creators"]] == [ORCID]
     assert 'doi: "10.5281/zenodo.13755820"' in lines
     assert "matthiaskoenig/pymetadata" not in ZENODO.read_text(encoding="utf-8")
+
+
+PAPER_DOI = "10.1038/s41540-026-00828-7"
+
+
+def test_publication_is_referenced() -> None:
+    # the publication of the FAIR COMBINE Archive Indicators
+    text = CITATION.read_text(encoding="utf-8")
+    assert f'doi: "{PAPER_DOI}"' in text
+    assert "biorxiv" not in text.lower()
+    zenodo = json.loads(ZENODO.read_text(encoding="utf-8"))
+    assert {
+        "identifier": PAPER_DOI,
+        "relation": "isSupplementTo",
+        "scheme": "doi",
+        "resource_type": "publication-article",
+    } in zenodo["related_identifiers"]
+
+
+def test_preprint_is_not_cited() -> None:
+    sources = [
+        ROOT / "README.md",
+        ROOT / "docs" / "index.md",
+        ROOT / "src" / "fairvis" / "app.py",
+    ]
+    for path in sources:
+        text = path.read_text(encoding="utf-8")
+        assert "10.1101/2025.03.21.644517" not in text, path
+        assert PAPER_DOI in text, path

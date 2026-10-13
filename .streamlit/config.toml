@@ -1,5 +1,17 @@
+# Options of the app on Streamlit Community Cloud and of `streamlit run` from a
+# checkout; `fairvis` passes the same options, see `STREAMLIT_OPTIONS` in
+# src/fairvis/cli.py (tests/test_cli.py keeps both equal).
+
 [browser]
 gatherUsageStats = false
 
+[client]
+# an unexpected error shows its type, not the traceback with the paths of the server
+showErrorDetails = "type"
+
+[server]
+# an assessment is a small xlsx file, the template has about 20 kB
+maxUploadSize = 1
+
 [theme]
-base="light"
+base = "light"

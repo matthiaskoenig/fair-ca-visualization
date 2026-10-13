@@ -3,12 +3,15 @@
 import io
 import math
 import re
+import zipfile
 from collections.abc import Callable
 
 import pandas as pd
 import pytest
 
 from fairvis.data_io import (
+    MAX_ROWS,
+    MAX_UNPACKED_BYTES,
     assessment_class,
     load_assessment,
     load_indicators,
@@ -73,8 +76,68 @@ def test_load_assessment_missing_columns(
 
 
 def test_load_assessment_not_xlsx() -> None:
-    with pytest.raises(ValueError, match="no readable xlsx file"):
+    # the message names the problem, not internals of the parser
+    with pytest.raises(ValueError, match=r"^The file is no readable xlsx file\.$"):
         load_assessment(io.BytesIO(b"this is not an xlsx file"))
+
+
+def test_load_assessment_missing_indicator(
+    template_df: pd.DataFrame, to_xlsx: ToXlsx
+) -> None:
+    missing_id = template_df.loc[3, "ID"]
+    with pytest.raises(ValueError, match=f"misses the indicators {missing_id}"):
+        load_assessment(to_xlsx(template_df.drop(index=3)))
+
+
+def test_load_assessment_unknown_indicator(
+    template_df: pd.DataFrame, to_xlsx: ToXlsx
+) -> None:
+    df = template_df.copy()
+    df.loc[3, "ID"] = "CA-RDA-X9-99M"
+    with pytest.raises(ValueError, match="unknown indicators CA-RDA-X9-99M"):
+        load_assessment(to_xlsx(df))
+
+
+def test_load_assessment_duplicate_indicator(
+    template_df: pd.DataFrame, to_xlsx: ToXlsx
+) -> None:
+    df = pd.concat([template_df, template_df.iloc[[3]]], ignore_index=True)
+    with pytest.raises(ValueError, match=f"more than once: {template_df.loc[3, 'ID']}"):
+        load_assessment(to_xlsx(df))
+
+
+def test_load_assessment_too_many_rows(
+    template_df: pd.DataFrame, to_xlsx: ToXlsx
+) -> None:
+    rows = MAX_ROWS // len(template_df) + 1
+    df = pd.concat([template_df] * rows, ignore_index=True)
+    with pytest.raises(ValueError, match=f"more than {MAX_ROWS} rows"):
+        load_assessment(to_xlsx(df))
+
+
+def test_load_assessment_zip_bomb() -> None:
+    # a small upload which unpacks to more than MAX_UNPACKED_BYTES
+    upload = io.BytesIO()
+    with zipfile.ZipFile(upload, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("xl/sharedStrings.xml", b"0" * (MAX_UNPACKED_BYTES + 1))
+    assert upload.tell() < 1024**2
+    with pytest.raises(ValueError, match="too large when unpacked"):
+        load_assessment(upload)
+
+
+def test_load_assessment_reads_an_upload_after_the_size_check(
+    template_df: pd.DataFrame, to_xlsx: ToXlsx
+) -> None:
+    upload = to_xlsx(template_df)
+    upload.seek(5)
+    assert len(load_assessment(upload)) == len(template_df)
+
+
+def test_xml_of_uploads_is_parsed_defused() -> None:
+    # openpyxl protects against xml bombs only if defusedxml is installed
+    import openpyxl.xml
+
+    assert openpyxl.xml.DEFUSEDXML
 
 
 def test_validate_assessment_invalid_value(template_df: pd.DataFrame) -> None:

@@ -1,5 +1,8 @@
 """Loading and validation of FAIR assessments and the indicators."""
 
+import zipfile
+from collections import Counter
+from functools import cache
 from numbers import Real
 from pathlib import Path
 from typing import BinaryIO
@@ -25,6 +28,16 @@ REQUIRED_COLUMNS: tuple[str, ...] = (
 
 ASSESSMENT_VALUES: tuple[float, ...] = (0.0, 0.5, 1.0)
 """Allowed assessment values besides NA (not applicable, an empty cell)."""
+
+MAX_ROWS = 1000
+"""Rows read from an assessment; the template has one row per indicator, far fewer.
+
+Bounds the work of parsing an upload."""
+
+MAX_UNPACKED_BYTES = 20 * 1024**2
+"""Size of the unpacked content of an xlsx file, an assessment has less than 1 MB.
+
+An xlsx file is a zip archive; the limit rejects a zip bomb before it is parsed."""
 
 
 def assessment_class(value: object) -> int:
@@ -61,6 +74,21 @@ def _is_number(text: str) -> bool:
     return True
 
 
+@cache
+def template_indicator_ids() -> tuple[str, ...]:
+    """Indicator ids of the template, in the order of the template.
+
+    Returns:
+        the `ID` of every indicator of the template.
+    """
+    return tuple(pd.read_excel(TEMPLATE_PATH, sheet_name=0)["ID"])
+
+
+def _listing(ids: list[str], limit: int = 5) -> str:
+    shown = ", ".join(ids[:limit])
+    return shown if len(ids) <= limit else f"{shown} and {len(ids) - limit} more"
+
+
 def validate_assessment(df: pd.DataFrame) -> None:
     """Validate the structure and the values of a raw assessment.
 
@@ -68,8 +96,9 @@ def validate_assessment(df: pd.DataFrame) -> None:
         df: assessment as read from the xlsx file, before the `ID` index is set.
 
     Raises:
-        ValueError: if a column of the template is missing or an assessment value
-            is none of NA, 0, 0.5 and 1.
+        ValueError: if a column of the template is missing, the indicators differ
+            from the ones of the template or an assessment value is none of NA, 0,
+            0.5 and 1.
     """
     missing = [column for column in REQUIRED_COLUMNS if column not in df.columns]
     if missing:
@@ -77,11 +106,52 @@ def validate_assessment(df: pd.DataFrame) -> None:
             f"The assessment misses the columns {', '.join(missing)}. "
             "Fill out the FAIR assessment template."
         )
+    ids = [str(indicator_id) for indicator_id in df["ID"]]
+    duplicates = sorted(i for i, count in Counter(ids).items() if count > 1)
+    if duplicates:
+        raise ValueError(
+            f"The assessment has indicators more than once: {_listing(duplicates)}."
+        )
+    template_ids = template_indicator_ids()
+    id_set, template_id_set = set(ids), set(template_ids)
+    missing_ids = [i for i in template_ids if i not in id_set]
+    unknown_ids = [i for i in ids if i not in template_id_set]
+    if missing_ids or unknown_ids:
+        problems = []
+        if missing_ids:
+            problems.append(f"misses the indicators {_listing(missing_ids)}")
+        if unknown_ids:
+            problems.append(f"has unknown indicators {_listing(unknown_ids)}")
+        raise ValueError(
+            f"The assessment {' and '.join(problems)}. "
+            "Fill out the FAIR assessment template."
+        )
     for indicator_id, value in zip(df["ID"], df["Assessment"], strict=True):
         try:
             assessment_class(value)
         except ValueError as err:
             raise ValueError(f"Indicator '{indicator_id}': {err}.") from err
+
+
+def _check_unpacked_size(source: Path | BinaryIO) -> None:
+    """Reject an xlsx file whose content is larger than `MAX_UNPACKED_BYTES`.
+
+    zipfile never extracts more than the size an archive declares for a member,
+    so the declared sizes bound what parsing the file unpacks.
+    """
+    try:
+        with zipfile.ZipFile(source) as archive:
+            unpacked = sum(info.file_size for info in archive.infolist())
+    except zipfile.BadZipFile as err:
+        raise ValueError("The file is no readable xlsx file.") from err
+    finally:
+        if not isinstance(source, Path):
+            source.seek(0)
+    if unpacked > MAX_UNPACKED_BYTES:
+        raise ValueError(
+            "The file is too large when unpacked "
+            f"(more than {MAX_UNPACKED_BYTES // 1024**2} MB)."
+        )
 
 
 def load_assessment(source: Path | BinaryIO) -> pd.DataFrame:
@@ -95,12 +165,20 @@ def load_assessment(source: Path | BinaryIO) -> pd.DataFrame:
         and without columns lacking a header (named `Unnamed: <n>` by pandas).
 
     Raises:
-        ValueError: if the file is no readable xlsx file or no valid assessment.
+        ValueError: if the file is no readable xlsx file, unpacks to more than
+            `MAX_UNPACKED_BYTES`, has more than `MAX_ROWS` rows or is no valid
+            assessment.
     """
+    _check_unpacked_size(source)
     try:
-        df = pd.read_excel(source, sheet_name=0)
+        df = pd.read_excel(source, sheet_name=0, nrows=MAX_ROWS + 1)
     except Exception as err:
-        raise ValueError(f"The file is no readable xlsx file: {err}") from err
+        raise ValueError("The file is no readable xlsx file.") from err
+    if len(df) > MAX_ROWS:
+        raise ValueError(
+            f"The assessment has more than {MAX_ROWS} rows. "
+            "Fill out the FAIR assessment template."
+        )
     validate_assessment(df)
     unnamed = [column for column in df.columns if str(column).startswith("Unnamed")]
     return df.set_index("ID").drop(

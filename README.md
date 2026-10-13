@@ -6,7 +6,9 @@
 
 Computational models are essential tools for studying complex systems which, particularly in clinical settings, need to be quality-approved and transparent. A community-driven approach to enhance the transparency and communication of model features is adherence to the principles of Findability, Accessibility, Interoperability and Reusability (FAIR). The FAIR COMBINE Archive Indicators (FAIR-CA) adapt the FAIR indicators published by the Research Data Alliance to assess the FAIRness of models encoded in domain-specific standards, such as those established by [COMBINE](https://co.mbine.org).
 
-The FAIR COMBINE Archive Indicators project is available from [https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io](https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io).
+The FAIR COMBINE Archive Indicators project is available from [https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io](https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io) and described in
+
+> Balaur I., Nickerson D.P., Welter D., Wodke J.A.H., Ancien F., Gebhardt T., Grouès V., Hermjakob H., König M., Radde N., Rougny A., Schneider R., Malik-Sheriff R.S., Shiferaw K.B., Stefan M., Satagopam V., Waltemath D. (2026). A system for FAIR assessment of computational biology models and simulations based on RDA indicators. npj Systems Biology and Applications. [doi:10.1038/s41540-026-00828-7](https://doi.org/10.1038/s41540-026-00828-7)
 
 `fair-ca-visualization` visualizes FAIR-CA assessments interactively. The app is available from https://faircombine.streamlit.app, the documentation from https://matthiaskoenig.github.io/fair-ca-visualization.
 
@@ -25,11 +27,21 @@ See the [installation guide](https://matthiaskoenig.github.io/fair-ca-visualizat
 
 # How to cite
 
+If you use the FAIR COMBINE Archive Indicators, please cite the publication above. If you use `fair-ca-visualization`, please also cite the software:
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
 
 > König M. fair-ca-visualization: interactive visualization of the FAIR COMBINE Archive Indicators. Zenodo. [doi:10.5281/zenodo.13755820](https://doi.org/10.5281/zenodo.13755820)
 
 ```bibtex
+@article{balaur2026,
+  author  = {Balaur, Irina and Nickerson, David P. and Welter, Danielle and Wodke, Judith A. H. and Ancien, Francois and Gebhardt, Tom and Grou{\`e}s, Valentin and Hermjakob, Henning and K{\"o}nig, Matthias and Radde, Nicole and Rougny, Adrien and Schneider, Reinhard and Malik-Sheriff, Rahuman S. and Shiferaw, Kirubel Biruk and Stefan, Melanie and Satagopam, Venkata and Waltemath, Dagmar},
+  title   = {A system for {FAIR} assessment of computational biology models and simulations based on {RDA} indicators},
+  journal = {npj Systems Biology and Applications},
+  year    = {2026},
+  doi     = {10.1038/s41540-026-00828-7}
+}
+
 @software{fair_ca_visualization,
   author    = {König, Matthias},
   title     = {fair-ca-visualization: interactive visualization of the FAIR COMBINE Archive Indicators},

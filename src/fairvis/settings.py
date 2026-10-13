@@ -16,3 +16,6 @@ ASSESSMENTS_PATH: Path = DATA_PATH / "assessments"
 
 TEMPLATE_PATH: Path = DATA_PATH / "FAIR_assessment_template.xlsx"
 """Template of a FAIR assessment, also the definition of the indicators."""
+
+LOGO_PATH: Path = DATA_PATH / "fair-ca-logo.png"
+"""Logo of FAIR-CA, the icon of the app."""
