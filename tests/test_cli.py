@@ -1,5 +1,6 @@
 """Tests of the `fairvis` console script."""
 
+import os
 import subprocess
 import sys
 
@@ -42,9 +43,24 @@ def test_python_m_fairvis_help() -> None:
     result = subprocess.run(
         [sys.executable, "-m", "fairvis", "--help"],
         capture_output=True,
-        text=True,
+        encoding="utf-8",
         check=False,
         timeout=60,
     )
     assert result.returncode == 0, result.stderr
     assert "Usage" in result.stdout
+
+
+def test_help_without_utf8_stdout() -> None:
+    # the help of `streamlit run` contains non ascii characters; a redirected
+    # stdout on windows is encoded with the ansi code page, e.g. cp1252
+    result = subprocess.run(
+        [sys.executable, "-m", "fairvis", "--help"],
+        capture_output=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONIOENCODING": "cp1252"},
+        check=False,
+        timeout=60,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "\u2191" in result.stdout

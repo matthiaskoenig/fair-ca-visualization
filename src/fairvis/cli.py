@@ -5,6 +5,7 @@ app runs from an installed package, so they are passed on the command line.
 Further arguments are passed to `streamlit run`, e.g. `fairvis --server.port 8502`.
 """
 
+import io
 import sys
 
 from streamlit.web import cli as stcli
@@ -32,6 +33,14 @@ def streamlit_argv(args: list[str]) -> list[str]:
 
 
 def main() -> None:
-    """Start the FAIR-CA visualization app."""
+    """Start the FAIR-CA visualization app.
+
+    The output is written as UTF-8: the messages of streamlit contain non ascii
+    characters, which the ansi code page of a redirected stdout on windows, e.g.
+    cp1252, cannot encode (UTF-8 is the default from python 3.15 on, PEP 686).
+    """
+    for stream in (sys.stdout, sys.stderr):
+        if isinstance(stream, io.TextIOWrapper):
+            stream.reconfigure(encoding="utf-8")
     sys.argv = streamlit_argv(sys.argv[1:])
     sys.exit(stcli.main())
