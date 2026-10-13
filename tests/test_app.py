@@ -151,6 +151,7 @@ def test_indicators_tab_counts_the_examples() -> None:
     assert not at.exception
     df = at.dataframe[0].value
     assert list(df.columns[-4:]) == ["NA", "0", "0.5", "1"]
+    assert not [column for column in df.columns if column.startswith("Unnamed")]
     assert (
         df[["NA", "0", "0.5", "1"]].sum(axis=1) == len(load_model_assessments())
     ).all()

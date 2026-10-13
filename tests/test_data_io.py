@@ -19,6 +19,7 @@ from fairvis.data_io import (
     load_assessment,
     load_indicators,
     load_model_assessments,
+    read_first_sheet,
     validate_assessment,
 )
 from fairvis.settings import ASSESSMENTS_PATH, TEMPLATE_PATH
@@ -190,6 +191,15 @@ def test_load_assessment_takes_the_metadata_of_the_template(
         assert loaded.loc[indicator_id, column] == template_df.loc[3, column]
 
 
+@pytest.mark.parametrize(
+    "path", [TEMPLATE_PATH, *sorted(ASSESSMENTS_PATH.glob("*.xlsx"))], ids=str
+)
+def test_read_first_sheet_has_the_columns_of_pandas(path: Path) -> None:
+    # the rows are read at most `MAX_COLUMNS` wide, but not padded to it (#21)
+    expected = pd.read_excel(path, sheet_name=0)
+    assert list(read_first_sheet(path).columns) == list(expected.columns)
+
+
 @pytest.mark.parametrize("path", sorted(ASSESSMENTS_PATH.glob("*.xlsx")), ids=str)
 def test_load_assessment_agrees_with_pandas(path: Path) -> None:
     expected = pd.read_excel(path, sheet_name=0).set_index("ID")
@@ -228,6 +238,19 @@ def test_validate_assessment_invalid_value(template_df: pd.DataFrame) -> None:
 
 def test_validate_assessment_template_is_valid(template_df: pd.DataFrame) -> None:
     validate_assessment(template_df)
+
+
+def test_load_indicators_columns() -> None:
+    df = load_indicators(load_model_assessments())
+    assert list(df.columns) == [
+        "Short",
+        "Type",
+        "Category",
+        "Subcategory",
+        "Priority",
+        "Indicator",
+        "Assessment",
+    ]
 
 
 def test_load_indicators_counts() -> None:
