@@ -40,7 +40,7 @@ repos:
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # keep equal to the ruff version in uv.lock
-  rev: v0.17.0
+  rev: v0.17.3
   hooks:
     - id: ruff-check
       types_or: [ python, pyi ]
@@ -50,7 +50,7 @@ repos:
 
 - repo: https://github.com/astral-sh/ty-pre-commit
   # keep equal to the ty version in uv.lock
-  rev: v0.0.86
+  rev: v0.0.94
   hooks:
     # checks the whole project (see `[tool.ty]` in pyproject.toml) in the
     # environment uv syncs, which includes the dev group
