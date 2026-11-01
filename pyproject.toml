@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "fair-ca-visualization"
 # a static version: uv.lock records it, the uv of Streamlit Community Cloud
 # cannot parse a uv.lock without it; kept current by bump-my-version
-version = "0.5.1"
+version = "0.5.2"
 description = "Interactive visualization of the FAIR COMBINE Archive Indicators (FAIR-CA) for computational models."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -42,13 +42,13 @@ dependencies = [
 	# against xml bombs and external entities
 	"defusedxml>=0.7.1",
 	"kaleido>=1.5.0",
-	"numpy>=2.4.3",
+	"numpy>=2.5.4",
 	"openpyxl>=3.1.5",
-	"pandas>=2.3.3",
-	"plotly>=6.6.0",
-	"pyarrow>=23.0.1",
-	"rich>=14.3.3",
-	"streamlit>=1.55.0",
+	"pandas>=3.1.0",
+	"plotly>=7.1.0",
+	"pyarrow>=26.0.0",
+	"rich>=15.0.0",
+	"streamlit>=1.66.1",
 ]
 
 [project.scripts]
@@ -65,14 +65,14 @@ Download = "https://pypi.org/project/fair-ca-visualization"
 [dependency-groups]
 # installed by `uv sync` by default; not part of the published metadata
 dev = [
-	"bump-my-version>=1.5.1",
-	"mkdocstrings-python>=2.0.9",
-	"pre-commit>=4.6.2",
-	"pytest>=9.1.1",
+	"bump-my-version>=1.8.1",
+	"mkdocstrings-python>=2.0.10",
+	"pre-commit>=4.7.0",
+	"pytest>=9.2.0",
 	"pytest-xdist>=3.8.0",
-	"ruff>=0.16.10",
-	"ty>=0.0.84",
-	"zensical>=0.0.67",
+	"ruff>=0.17.3",
+	"ty>=0.0.95",
+	"zensical>=0.0.74",
 ]
 
 [tool.hatch.build.targets.wheel]
